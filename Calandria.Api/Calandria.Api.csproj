@@ -1,0 +1,64 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net472</TargetFramework>
+    <LangVersion>7.3</LangVersion>
+    <AssemblyName>Calandria.Api</AssemblyName>
+    <RootNamespace>Calandria.Api</RootNamespace>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="System.ServiceProcess" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Data" />
+    <!-- GDI+ para extraer los colores del logo de cada obra (ExtractorColoresLogo) -->
+    <Reference Include="System.Drawing" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Permite compilar net472 sin depender del targeting pack instalado -->
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
+    <!-- Web API auto-hospedado con OWIN (sin IIS). Arrastra Owin.Host.HttpListener + Newtonsoft.Json -->
+    <PackageReference Include="Microsoft.AspNet.WebApi.OwinSelfHost" Version="5.3.0" />
+    <!-- JWT (creación y validación con clave simétrica HS256) -->
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.35.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Fuente única del hasher: se enlaza el archivo del cliente, no se duplica -->
+    <Compile Include="..\DynamicSepticSystem\PasswordHasher.cs" Link="Shared\PasswordHasher.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- UI web que sirve UiController. Se copia siempre para poder reemplazarla
+         en el servidor sin recompilar el cliente. -->
+    <Content Include="ui\**\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <!-- Plantilla de esquema para aprovisionar obras nuevas (ObrasController.Crear). -->
+    <Content Include="Sql\**\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Secretos: NO se versionan (ver .gitignore). Cada máquina/servidor crea su
+         propia copia a partir de los .example. Se copian al output solo si existen. -->
+    <None Include="secrets.config" Condition="Exists('secrets.config')">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="connectionStrings.config" Condition="Exists('connectionStrings.config')">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="secrets.config.example">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="connectionStrings.config.example">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

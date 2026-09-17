@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Mapa de Código - DynamicSepticSystem</title>
+    <script type="text/javascript" src="https://unpkg.com"></script>
+    <style>
+        body { margin: 0; font-family: sans-serif; background-color: #1a1a1a; color: white; }
+        #network { width: 100vw; height: 100vh; }
+        #loading { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 24px; pointer-events: none; }
+    </style>
+</head>
+<body>
+    <div id="loading">Cargando mapa de C# (3.6 MB)...</div>
+    <div id="network"></div>
+
+    <script type="text/javascript">
+        fetch('graph.json')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('loading').style.display = 'none';
+                
+                // Mapear los nodos de Graphify al formato Vis.js
+                const nodes = data.nodes.map(node => ({
+                    id: node.id,
+                    label: node.name,
+                    title: `Tipo: ${node.type}\nArchivo: ${node.file_path}`,
+                    group: node.type,
+                    shape: node.type === 'class' ? 'diamond' : 'dot',
+                    size: node.type === 'class' ? 25 : 15
+                }));
+
+                // Mapear las relaciones (aristas)
+                const edges = data.edges.map(edge => ({
+                    from: edge.source,
+                    to: edge.target,
+                    label: edge.type,
+                    arrows: 'to',
+                    color: { color: '#666', highlight: '#ff0000' }
+                }));
+
+                const container = document.getElementById('network');
+                const networkData = { nodes: nodes, edges: edges };
+                const options = {
+                    nodes: { font: { color: '#ffffff', size: 14 } },
+                    groups: {
+                        class: { color: { background: '#2b7ce9', border: '#16509e' } },
+                        function: { color: { background: '#5cd65c', border: '#2eb82e' } }
+                    },
+                    physics: { barnesHut: { gravitationalConstant: -2000, centralGravity: 0.3, springLength: 95 } }
+                };
+                new vis.Network(container, networkData, options);
+            })
+            .catch(err => {
+                document.getElementById('loading').innerText = "Error al cargar graph.json. Asegúrate de levantar un servidor local.";
+                console.error(err);
+            });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1232 @@
+{
+  "Actualizador.cs": {
+    "mtime": 1784852590.925766,
+    "ast_hash": "b14a25dc78ad852ade4481a9853610d3",
+    "semantic_hash": "b14a25dc78ad852ade4481a9853610d3"
+  },
+  "ApiClient.cs": {
+    "mtime": 1782470627.0544834,
+    "ast_hash": "bcd50626962f6477bc8583ce419b5651",
+    "semantic_hash": "bcd50626962f6477bc8583ce419b5651"
+  },
+  "CasaInventario.cs": {
+    "mtime": 1760484196.700475,
+    "ast_hash": "db2d0a2897ea3beafe9dceecbf98bc71",
+    "semantic_hash": "db2d0a2897ea3beafe9dceecbf98bc71"
+  },
+  "ConceptoExistente.cs": {
+    "mtime": 1769972507.3092961,
+    "ast_hash": "236694f6abc044b312d2d3ec565627c2",
+    "semantic_hash": "236694f6abc044b312d2d3ec565627c2"
+  },
+  "DIAGNOSTICO_ClavesDuplicadas_FormHardProgress.sql": {
+    "mtime": 1763062728.1506498,
+    "ast_hash": "9856e68ca06e99636370002b96dbcd06",
+    "semantic_hash": "9856e68ca06e99636370002b96dbcd06"
+  },
+  "DIAGNOSTICO_OrdenConceptos.sql": {
+    "mtime": 1763011718.1375039,
+    "ast_hash": "adf7a97c68c12503a7ca458655da67f4",
+    "semantic_hash": "adf7a97c68c12503a7ca458655da67f4"
+  },
+  "DIAGNOSTICO_Partidas.sql": {
+    "mtime": 1762884429.7592607,
+    "ast_hash": "db9daf28cf6973e092cae6008df6ede7",
+    "semantic_hash": "db9daf28cf6973e092cae6008df6ede7"
+  },
+  "DetalleOrdenHelper.cs": {
+    "mtime": 1749833655.7640502,
+    "ast_hash": "c60dd689cdb0b35c4dd0378181bd6678",
+    "semantic_hash": "c60dd689cdb0b35c4dd0378181bd6678"
+  },
+  "DialogSeleccionarNivel.cs": {
+    "mtime": 1779705162.8734207,
+    "ast_hash": "7bcf9caa5ecb7ea9f872132c78355280",
+    "semantic_hash": "7bcf9caa5ecb7ea9f872132c78355280"
+  },
+  "DynamicSepticSystem.csproj": {
+    "mtime": 1783748550.3507721,
+    "ast_hash": "a3fa2325f1619ecded2271cbfea29022",
+    "semantic_hash": "a3fa2325f1619ecded2271cbfea29022"
+  },
+  "DynamicSepticSystem/FormHardProgress.Designer.cs": {
+    "mtime": 1763063858.60284,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "ErrorLogger.cs": {
+    "mtime": 1781552655.114497,
+    "ast_hash": "c1f663ddabdd1a2cf8a609c3081e8905",
+    "semantic_hash": "c1f663ddabdd1a2cf8a609c3081e8905"
+  },
+  "FolioManager.cs": {
+    "mtime": 1749681989.2011776,
+    "ast_hash": "9e6a5688392eb2e488ea344862189d48",
+    "semantic_hash": "9e6a5688392eb2e488ea344862189d48"
+  },
+  "FormActivarTareasTreeList.Almacen.cs": {
+    "mtime": 1782442065.890273,
+    "ast_hash": "5284f89d90577ef0dc34dd9c34dfc5e3",
+    "semantic_hash": "5284f89d90577ef0dc34dd9c34dfc5e3"
+  },
+  "FormActivarTareasTreeList.Designer.cs": {
+    "mtime": 1782441980.6209152,
+    "ast_hash": "41875b67e1023aa7e81a3bc38add72f2",
+    "semantic_hash": "41875b67e1023aa7e81a3bc38add72f2"
+  },
+  "FormActivarTareasTreeList.Insumos.cs": {
+    "mtime": 1782375274.7562187,
+    "ast_hash": "f502c3975e5c13a6b4f9646adbc558e8",
+    "semantic_hash": "f502c3975e5c13a6b4f9646adbc558e8"
+  },
+  "FormActivarTareasTreeList.PanelGuia.cs": {
+    "mtime": 1782395806.493535,
+    "ast_hash": "0782e06fc8ccb952ba7e7cdd2f3c18cd",
+    "semantic_hash": "0782e06fc8ccb952ba7e7cdd2f3c18cd"
+  },
+  "FormActivarTareasTreeList.PanelPasos.cs": {
+    "mtime": 1782445155.2836335,
+    "ast_hash": "4f4826388f8416ace9b661ff3fd338a6",
+    "semantic_hash": "4f4826388f8416ace9b661ff3fd338a6"
+  },
+  "FormActivarTareasTreeList.cs": {
+    "mtime": 1782445149.2592318,
+    "ast_hash": "2566920a104a436c2ad19ddf34742fae",
+    "semantic_hash": "2566920a104a436c2ad19ddf34742fae"
+  },
+  "FormAdministrativos.Designer.cs": {
+    "mtime": 1783748330.207486,
+    "ast_hash": "7e4a17be97466758829422f2f4c568e4",
+    "semantic_hash": "7e4a17be97466758829422f2f4c568e4"
+  },
+  "FormAdministrativos.cs": {
+    "mtime": 1783748330.0038707,
+    "ast_hash": "e96ea98677c5707cb2617c994672ceda",
+    "semantic_hash": "e96ea98677c5707cb2617c994672ceda"
+  },
+  "FormAgregarConcepto.Designer.cs": {
+    "mtime": 1769972908.1488783,
+    "ast_hash": "d5c6817124a1c48a87af37f915d95d87",
+    "semantic_hash": "d5c6817124a1c48a87af37f915d95d87"
+  },
+  "FormAgregarConcepto.cs": {
+    "mtime": 1779704859.4614732,
+    "ast_hash": "3f20e1b76e30e5861936e5de14dfdfac",
+    "semantic_hash": "3f20e1b76e30e5861936e5de14dfdfac"
+  },
+  "FormAgregarInsumoCarrito.cs": {
+    "mtime": 1765943439.6720319,
+    "ast_hash": "10f99c51f17af84e3bb6a11b387d25de",
+    "semantic_hash": "10f99c51f17af84e3bb6a11b387d25de"
+  },
+  "FormAgregarInsumoIndirecto.Designer.cs": {
+    "mtime": 1762205621.761413,
+    "ast_hash": "ff0e161bb228c1031a33d63c1e5e6c31",
+    "semantic_hash": "ff0e161bb228c1031a33d63c1e5e6c31"
+  },
+  "FormAgregarInsumoIndirecto.cs": {
+    "mtime": 1779704897.5857074,
+    "ast_hash": "453f2ebc5869b44c3033a4eefd7a4292",
+    "semantic_hash": "453f2ebc5869b44c3033a4eefd7a4292"
+  },
+  "FormAgregarProveedor.Designer.cs": {
+    "mtime": 1762206393.0990381,
+    "ast_hash": "72d425c57b0bf375fe8d00a852736504",
+    "semantic_hash": "72d425c57b0bf375fe8d00a852736504"
+  },
+  "FormAgregarProveedor.cs": {
+    "mtime": 1781666232.4240296,
+    "ast_hash": "d2ace22d432367e90ae3e0ea25a4bc9d",
+    "semantic_hash": "d2ace22d432367e90ae3e0ea25a4bc9d"
+  },
+  "FormAlmacen.Designer.cs": {
+    "mtime": 1769111508.2116568,
+    "ast_hash": "adf899596f322443352af5c3549ad4fb",
+    "semantic_hash": "adf899596f322443352af5c3549ad4fb"
+  },
+  "FormAlmacen.cs": {
+    "mtime": 1768330091.270454,
+    "ast_hash": "54da5ad049ecc1253631bd2b201eac15",
+    "semantic_hash": "54da5ad049ecc1253631bd2b201eac15"
+  },
+  "FormAlmacen_ConsultaCasa.cs": {
+    "mtime": 1781609032.2936199,
+    "ast_hash": "2dfe8ccd2a0aef7de5455c058fdfb745",
+    "semantic_hash": "2dfe8ccd2a0aef7de5455c058fdfb745"
+  },
+  "FormAlmacen_Core.cs": {
+    "mtime": 1768332704.885417,
+    "ast_hash": "d3298208ade6c1c7b7f371a671d39873",
+    "semantic_hash": "d3298208ade6c1c7b7f371a671d39873"
+  },
+  "FormAlmacen_Entradas.cs": {
+    "mtime": 1782531891.299385,
+    "ast_hash": "08d07879d9a569d30ff7725af59eca0e",
+    "semantic_hash": "08d07879d9a569d30ff7725af59eca0e"
+  },
+  "FormAlmacen_EntradasTarjetas.cs": {
+    "mtime": 1782531926.3092754,
+    "ast_hash": "541fc8a01835d384420e2e52222d760b",
+    "semantic_hash": "541fc8a01835d384420e2e52222d760b"
+  },
+  "FormAlmacen_ExtensionPDFSalidas.cs": {
+    "mtime": 1782374649.5379455,
+    "ast_hash": "1772dd5ab465707ee36e9e59fb18c648",
+    "semantic_hash": "1772dd5ab465707ee36e9e59fb18c648"
+  },
+  "FormAlmacen_Historial.cs": {
+    "mtime": 1769105847.061382,
+    "ast_hash": "76480aa3d3944e7de9f856a1911d94db",
+    "semantic_hash": "76480aa3d3944e7de9f856a1911d94db"
+  },
+  "FormAlmacen_Inventario.cs": {
+    "mtime": 1768333118.2500541,
+    "ast_hash": "428c9ce51137c99b37d66a2e2d27261c",
+    "semantic_hash": "428c9ce51137c99b37d66a2e2d27261c"
+  },
+  "FormAlmacen_Layout.cs": {
+    "mtime": 1782530569.0216887,
+    "ast_hash": "66056e9d5d7b14ac4061a7ea0d573a82",
+    "semantic_hash": "66056e9d5d7b14ac4061a7ea0d573a82"
+  },
+  "FormAlmacen_Salidas.cs": {
+    "mtime": 1782467243.288403,
+    "ast_hash": "970a5b0ef106750fc66c8b7816d590ca",
+    "semantic_hash": "970a5b0ef106750fc66c8b7816d590ca"
+  },
+  "FormAlmacen_Theme.cs": {
+    "mtime": 1779853117.042482,
+    "ast_hash": "431827df852aa8feaff3ecd5b05983d4",
+    "semantic_hash": "431827df852aa8feaff3ecd5b05983d4"
+  },
+  "FormAsignarCuadrilla.cs": {
+    "mtime": 1779840024.3128133,
+    "ast_hash": "5885b16d6df2529c9cee401355c026e2",
+    "semantic_hash": "5885b16d6df2529c9cee401355c026e2"
+  },
+  "FormAsignarNomina.cs": {
+    "mtime": 1781609520.2666128,
+    "ast_hash": "c778a0ae02dac78a5d94c4f8a4917fc2",
+    "semantic_hash": "c778a0ae02dac78a5d94c4f8a4917fc2"
+  },
+  "FormAvanceConcepto.Designer.cs": {
+    "mtime": 1762902481.8171513,
+    "ast_hash": "7bc887878bffe6bcf4f84d3cbe7c27c0",
+    "semantic_hash": "7bc887878bffe6bcf4f84d3cbe7c27c0"
+  },
+  "FormAvanceConcepto.cs": {
+    "mtime": 1781734273.5699856,
+    "ast_hash": "0c67a698b34d0530dc986969350781b0",
+    "semantic_hash": "0c67a698b34d0530dc986969350781b0"
+  },
+  "FormAvanceObra.Designer.cs": {
+    "mtime": 1781552583.8695378,
+    "ast_hash": "1f2808eda6bb52d2199ef00491b454dd",
+    "semantic_hash": "1f2808eda6bb52d2199ef00491b454dd"
+  },
+  "FormAvanceObra.cs": {
+    "mtime": 1781731494.1203067,
+    "ast_hash": "4a797091ce5d173b5cfa7ca8fd241c12",
+    "semantic_hash": "4a797091ce5d173b5cfa7ca8fd241c12"
+  },
+  "FormAvanceObra_BACKUP.cs": {
+    "mtime": 1762367469.4529514,
+    "ast_hash": "5353b6aebadead9a310f8b0425a16771",
+    "semantic_hash": "5353b6aebadead9a310f8b0425a16771"
+  },
+  "FormCompraIndirecta.Designer.cs": {
+    "mtime": 1764704770.062343,
+    "ast_hash": "61b9f0c8bf039bf7f5d8f78b81b2c56b",
+    "semantic_hash": "61b9f0c8bf039bf7f5d8f78b81b2c56b"
+  },
+  "FormCompraIndirecta.cs": {
+    "mtime": 1781688108.471049,
+    "ast_hash": "39f264fb7583082ce100656b81d92992",
+    "semantic_hash": "39f264fb7583082ce100656b81d92992"
+  },
+  "FormCompraIndirecta_ExtensionPDFRepositorio.cs": {
+    "mtime": 1781687992.6564336,
+    "ast_hash": "a4bda1b5c1f3f4eb60be6e2ad1c00c1f",
+    "semantic_hash": "a4bda1b5c1f3f4eb60be6e2ad1c00c1f"
+  },
+  "FormCompraMulti.Designer.cs": {
+    "mtime": 1765943552.4631913,
+    "ast_hash": "46fda07396dd1a403b9376a5bd449609",
+    "semantic_hash": "46fda07396dd1a403b9376a5bd449609"
+  },
+  "FormCompraMulti.cs": {
+    "mtime": 1782475892.5817027,
+    "ast_hash": "0336926b86a1ab7f9304f059799390dc",
+    "semantic_hash": "0336926b86a1ab7f9304f059799390dc"
+  },
+  "FormCompraMulti_ExtensionPDFRepositorio.cs": {
+    "mtime": 1781687922.3298614,
+    "ast_hash": "c47e84c3f55d20ff04568603b7e3f28c",
+    "semantic_hash": "c47e84c3f55d20ff04568603b7e3f28c"
+  },
+  "FormDestajosPorCuadrilla.cs": {
+    "mtime": 1779877269.77307,
+    "ast_hash": "0a79f33e9d84d93a43d320637f5dbe4a",
+    "semantic_hash": "0a79f33e9d84d93a43d320637f5dbe4a"
+  },
+  "FormDetalleEstimacion.Designer.cs": {
+    "mtime": 1763070914.1755311,
+    "ast_hash": "16dd341cfd41c14e6561af6f101d11bd",
+    "semantic_hash": "16dd341cfd41c14e6561af6f101d11bd"
+  },
+  "FormDetalleEstimacion.cs": {
+    "mtime": 1779704899.6979086,
+    "ast_hash": "8f78c318500029b7aedaf968f655f483",
+    "semantic_hash": "8f78c318500029b7aedaf968f655f483"
+  },
+  "FormDetalleOrdenCompra.Designer.cs": {
+    "mtime": 1763502136.7548418,
+    "ast_hash": "cbf3842f71ac509981aa4f4b8f8a70bf",
+    "semantic_hash": "cbf3842f71ac509981aa4f4b8f8a70bf"
+  },
+  "FormDetalleOrdenCompra.cs": {
+    "mtime": 1781688082.610772,
+    "ast_hash": "d2a4dc594b9e7f60b267a7b1e43b0337",
+    "semantic_hash": "d2a4dc594b9e7f60b267a7b1e43b0337"
+  },
+  "FormDetalleValeSalida.Designer.cs": {
+    "mtime": 1769110055.1258843,
+    "ast_hash": "64358efb218ffcead8ac61798712d457",
+    "semantic_hash": "64358efb218ffcead8ac61798712d457"
+  },
+  "FormDetalleValeSalida.cs": {
+    "mtime": 1769110024.3519547,
+    "ast_hash": "0a260618e0cc0b7005cc5fafbfda02e1",
+    "semantic_hash": "0a260618e0cc0b7005cc5fafbfda02e1"
+  },
+  "FormDiagnosticoConexion.cs": {
+    "mtime": 1779704902.2864509,
+    "ast_hash": "32b63d75a8f50d585677af38cb78cc96",
+    "semantic_hash": "32b63d75a8f50d585677af38cb78cc96"
+  },
+  "FormDistribucionNomina.cs": {
+    "mtime": 1782396680.2943473,
+    "ast_hash": "28d30b1b06aee9a5e203a986200528f5",
+    "semantic_hash": "28d30b1b06aee9a5e203a986200528f5"
+  },
+  "FormEditarExplosiones.cs": {
+    "mtime": 1779704906.4968784,
+    "ast_hash": "61f7c622c82acf051f0db2b9c43713b7",
+    "semantic_hash": "61f7c622c82acf051f0db2b9c43713b7"
+  },
+  "FormEditorTreeList.Designer.cs": {
+    "mtime": 1783748386.2582247,
+    "ast_hash": "2b8e3d7913034eae1edbb51ce3dcfe36",
+    "semantic_hash": "2b8e3d7913034eae1edbb51ce3dcfe36"
+  },
+  "FormEditorTreeList.Dialogos.cs": {
+    "mtime": 1779705144.2220955,
+    "ast_hash": "ff091dd606313271c52ddfa976d83afd",
+    "semantic_hash": "ff091dd606313271c52ddfa976d83afd"
+  },
+  "FormEditorTreeList.GestorInsumos.cs": {
+    "mtime": 1781145147.8754356,
+    "ast_hash": "cf982d7bbe719963f96e3f90018e8060",
+    "semantic_hash": "cf982d7bbe719963f96e3f90018e8060"
+  },
+  "FormEditorTreeList.cs": {
+    "mtime": 1783748599.9686065,
+    "ast_hash": "7406fe11e467672adb8d6ba2d450d3a1",
+    "semantic_hash": "7406fe11e467672adb8d6ba2d450d3a1"
+  },
+  "FormEstimacionConcepto.Designer.cs": {
+    "mtime": 1762462899.520327,
+    "ast_hash": "199426aa0764dc0f1b28220e25bf8690",
+    "semantic_hash": "199426aa0764dc0f1b28220e25bf8690"
+  },
+  "FormEstimacionConcepto.cs": {
+    "mtime": 1779704909.1397543,
+    "ast_hash": "1b1f499a0ed7e7b8c9d8636e1ddb531b",
+    "semantic_hash": "1b1f499a0ed7e7b8c9d8636e1ddb531b"
+  },
+  "FormEstimacionConceptoMigrado.AgregarConcepto.cs": {
+    "mtime": 1781899475.2435162,
+    "ast_hash": "e80b78d2e574a57621b69938317c3993",
+    "semantic_hash": "e80b78d2e574a57621b69938317c3993"
+  },
+  "FormEstimacionConceptoMigrado.Avances.cs": {
+    "mtime": 1781908198.2925935,
+    "ast_hash": "eefb9b8161dc75d94fcbe1d57b7f9ae8",
+    "semantic_hash": "eefb9b8161dc75d94fcbe1d57b7f9ae8"
+  },
+  "FormEstimacionConceptoMigrado.CargaDatos.cs": {
+    "mtime": 1781767197.3389325,
+    "ast_hash": "1762386ad686bcb57d8e381f5bc5c961",
+    "semantic_hash": "1762386ad686bcb57d8e381f5bc5c961"
+  },
+  "FormEstimacionConceptoMigrado.Designer.cs": {
+    "mtime": 1781552567.1498954,
+    "ast_hash": "198487c3c8c72cba78626562b6aae864",
+    "semantic_hash": "198487c3c8c72cba78626562b6aae864"
+  },
+  "FormEstimacionConceptoMigrado.MenuContextual.cs": {
+    "mtime": 1781901668.8504865,
+    "ast_hash": "4503049ecd7bfac417947667b5f8ac9c",
+    "semantic_hash": "4503049ecd7bfac417947667b5f8ac9c"
+  },
+  "FormEstimacionConceptoMigrado.Preview.cs": {
+    "mtime": 1771015613.3705373,
+    "ast_hash": "12fbd95baf8758df9068dcbfd0d88dbd",
+    "semantic_hash": "12fbd95baf8758df9068dcbfd0d88dbd"
+  },
+  "FormEstimacionConceptoMigrado.Propiedades.cs": {
+    "mtime": 1780527022.498374,
+    "ast_hash": "4563b4fbb7a526bf29ef6d34cb73a09d",
+    "semantic_hash": "4563b4fbb7a526bf29ef6d34cb73a09d"
+  },
+  "FormEstimacionConceptoMigrado.TreeListView.cs": {
+    "mtime": 1770938957.866542,
+    "ast_hash": "15ec8694686c8d145e7fc668366b29bf",
+    "semantic_hash": "15ec8694686c8d145e7fc668366b29bf"
+  },
+  "FormEstimacionConceptoMigrado.cs": {
+    "mtime": 1780527030.4944315,
+    "ast_hash": "3df7f61b7e29686ae674b8afd5ed1b87",
+    "semantic_hash": "3df7f61b7e29686ae674b8afd5ed1b87"
+  },
+  "FormEstimacionConceptoMigrado_ExtensionEvidencias.cs": {
+    "mtime": 1779705174.8355458,
+    "ast_hash": "34e3e8b096f9df976aafd97e7cae7db4",
+    "semantic_hash": "34e3e8b096f9df976aafd97e7cae7db4"
+  },
+  "FormEstimacionConceptoMigrado_ExtensionFolios.cs": {
+    "mtime": 1781908177.5475907,
+    "ast_hash": "599ab62a9dddd73b798d1d146324bae5",
+    "semantic_hash": "599ab62a9dddd73b798d1d146324bae5"
+  },
+  "FormEstimacionConceptoMigrado_ExtensionFolios_Fixed.cs": {
+    "mtime": 1763074399.5527532,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "FormEstimacionConceptoMigrado_ExtensionFotosConcepto.cs": {
+    "mtime": 1780540463.7848628,
+    "ast_hash": "07fed44f142ceb48b507a9c63f9adb54",
+    "semantic_hash": "07fed44f142ceb48b507a9c63f9adb54"
+  },
+  "FormEstimacionConceptoMigrado_ExtensionPDF.cs": {
+    "mtime": 1771015542.495087,
+    "ast_hash": "cac0d406fff1e5eec07a16704de4315a",
+    "semantic_hash": "cac0d406fff1e5eec07a16704de4315a"
+  },
+  "FormEvidenciasFotograficas.Designer.cs": {
+    "mtime": 1762464051.1247346,
+    "ast_hash": "bc19775589a0c759a69a3f64954d8ae7",
+    "semantic_hash": "bc19775589a0c759a69a3f64954d8ae7"
+  },
+  "FormEvidenciasFotograficas.cs": {
+    "mtime": 1763059596.09515,
+    "ast_hash": "6096213b5e667d12341f8e97724a25a8",
+    "semantic_hash": "6096213b5e667d12341f8e97724a25a8"
+  },
+  "FormGenerarOrden.Designer.cs": {
+    "mtime": 1750201658.4451814,
+    "ast_hash": "ecaa88f7fa0bf610a5a26cf545dcd3aa",
+    "semantic_hash": "ecaa88f7fa0bf610a5a26cf545dcd3aa"
+  },
+  "FormGenerarOrden.cs": {
+    "mtime": 1779704914.4230235,
+    "ast_hash": "59495faad4c649643075840172d0547a",
+    "semantic_hash": "59495faad4c649643075840172d0547a"
+  },
+  "FormGestionarPartidas.CRUD.cs": {
+    "mtime": 1770769217.4337137,
+    "ast_hash": "03431cbaae34d8d589850ae7a2eb00cd",
+    "semantic_hash": "03431cbaae34d8d589850ae7a2eb00cd"
+  },
+  "FormGestionarPartidas.CargaDatos.cs": {
+    "mtime": 1770771387.2713492,
+    "ast_hash": "072ed56437b897895f5c1834682c2fde",
+    "semantic_hash": "072ed56437b897895f5c1834682c2fde"
+  },
+  "FormGestionarPartidas.Designer.cs": {
+    "mtime": 1770770721.21377,
+    "ast_hash": "47b9ff3b7b46d8ba1f9b31afe75dcb3d",
+    "semantic_hash": "47b9ff3b7b46d8ba1f9b31afe75dcb3d"
+  },
+  "FormGestionarPartidas.Guardado.cs": {
+    "mtime": 1770772481.010761,
+    "ast_hash": "82a4eb8471d9b9bf7841dc2aa3492275",
+    "semantic_hash": "82a4eb8471d9b9bf7841dc2aa3492275"
+  },
+  "FormGestionarPartidas.Reordenar.cs": {
+    "mtime": 1770770859.2288501,
+    "ast_hash": "96ca0659fd9512e786d8df7b6ba4e24e",
+    "semantic_hash": "96ca0659fd9512e786d8df7b6ba4e24e"
+  },
+  "FormGestionarPartidas.WBS.cs": {
+    "mtime": 1770781901.7953248,
+    "ast_hash": "2c8185e8d6809346240ea673d3a1fec7",
+    "semantic_hash": "2c8185e8d6809346240ea673d3a1fec7"
+  },
+  "FormGestionarPartidas.cs": {
+    "mtime": 1779704916.515424,
+    "ast_hash": "a5720975859333bb22bad3e12b711132",
+    "semantic_hash": "a5720975859333bb22bad3e12b711132"
+  },
+  "FormHardProgress.Designer.cs": {
+    "mtime": 1781552575.3164477,
+    "ast_hash": "96d6d520a17827c6f50ea4ada10c8587",
+    "semantic_hash": "96d6d520a17827c6f50ea4ada10c8587"
+  },
+  "FormHardProgress.cs": {
+    "mtime": 1781731702.540032,
+    "ast_hash": "d773eb6cf1f86ab795286be3ae595905",
+    "semantic_hash": "d773eb6cf1f86ab795286be3ae595905"
+  },
+  "FormInsumos.Designer.cs": {
+    "mtime": 1761093704.6560345,
+    "ast_hash": "615083d094cfcc919455b9022e7288a8",
+    "semantic_hash": "615083d094cfcc919455b9022e7288a8"
+  },
+  "FormInsumos.cs": {
+    "mtime": 1779704918.399624,
+    "ast_hash": "295c9e007b2eec924b74a1b5bc4caf40",
+    "semantic_hash": "295c9e007b2eec924b74a1b5bc4caf40"
+  },
+  "FormLogErrores.cs": {
+    "mtime": 1780367227.4294772,
+    "ast_hash": "ea714222c6576548571890cb133b7a31",
+    "semantic_hash": "ea714222c6576548571890cb133b7a31"
+  },
+  "FormLogin.Designer.cs": {
+    "mtime": 1779874611.3740282,
+    "ast_hash": "a6fe67bd8040788f0998f5c2a8f26ae5",
+    "semantic_hash": "a6fe67bd8040788f0998f5c2a8f26ae5"
+  },
+  "FormLogin.cs": {
+    "mtime": 1781606389.5066004,
+    "ast_hash": "5cf79160f96dbc6aeff7f05980fb9c7e",
+    "semantic_hash": "5cf79160f96dbc6aeff7f05980fb9c7e"
+  },
+  "FormManoObra.Designer.cs": {
+    "mtime": 1761095040.6553576,
+    "ast_hash": "26e0cb7c2ef59b9c2321b693d3305dd7",
+    "semantic_hash": "26e0cb7c2ef59b9c2321b693d3305dd7"
+  },
+  "FormManoObra.cs": {
+    "mtime": 1779704952.9941263,
+    "ast_hash": "9e7c98abe85c375e9bfa4c464b32ff8a",
+    "semantic_hash": "9e7c98abe85c375e9bfa4c464b32ff8a"
+  },
+  "FormMapearCoordenadas.Designer.cs": {
+    "mtime": 1765312748.1598575,
+    "ast_hash": "ae914d049dee74faf82f6ddffe0b4d47",
+    "semantic_hash": "ae914d049dee74faf82f6ddffe0b4d47"
+  },
+  "FormMapearCoordenadas.cs": {
+    "mtime": 1779704955.5973854,
+    "ast_hash": "8ec57261b98e5bd940bcbf6d88087bcf",
+    "semantic_hash": "8ec57261b98e5bd940bcbf6d88087bcf"
+  },
+  "FormPdfPreview.cs": {
+    "mtime": 1779704958.2600868,
+    "ast_hash": "f3c9495263e35cfaa3d2564c367ff691",
+    "semantic_hash": "f3c9495263e35cfaa3d2564c367ff691"
+  },
+  "FormPerfilTrabajador.cs": {
+    "mtime": 1779705156.2945213,
+    "ast_hash": "7990fa519aa4c54160306eee5edc5a56",
+    "semantic_hash": "7990fa519aa4c54160306eee5edc5a56"
+  },
+  "FormPreviewPDFMaximizado.cs": {
+    "mtime": 1779704960.2911253,
+    "ast_hash": "6f7bb181f23db2019c380bf4f0a076f2",
+    "semantic_hash": "6f7bb181f23db2019c380bf4f0a076f2"
+  },
+  "FormProgresoActualizacion.Designer.cs": {
+    "mtime": 1759258673.421029,
+    "ast_hash": "b6f0395b4378a9a0dbdf8de730af010a",
+    "semantic_hash": "b6f0395b4378a9a0dbdf8de730af010a"
+  },
+  "FormProgresoActualizacion.cs": {
+    "mtime": 1779704962.3061814,
+    "ast_hash": "512a0af51c4886cfd4efa70b4879c7b6",
+    "semantic_hash": "512a0af51c4886cfd4efa70b4879c7b6"
+  },
+  "FormPropiedadesConcepto.cs": {
+    "mtime": 1780525883.5299838,
+    "ast_hash": "097ab20e598b658bba1e6be6c89d662a",
+    "semantic_hash": "097ab20e598b658bba1e6be6c89d662a"
+  },
+  "FormPropiedadesDestajo.cs": {
+    "mtime": 1779705159.1541615,
+    "ast_hash": "cc93638a9e6daf5597f1e1936c6033d2",
+    "semantic_hash": "cc93638a9e6daf5597f1e1936c6033d2"
+  },
+  "FormRegistrarTrabajador.Designer.cs": {
+    "mtime": 1779843643.026122,
+    "ast_hash": "65370745527538c53dbd03890890b8e2",
+    "semantic_hash": "65370745527538c53dbd03890890b8e2"
+  },
+  "FormRegistrarTrabajador.cs": {
+    "mtime": 1779843704.944006,
+    "ast_hash": "48b9384bd6dfc56027ea0c18b0d43f74",
+    "semantic_hash": "48b9384bd6dfc56027ea0c18b0d43f74"
+  },
+  "FormRegistrarUsuario.Designer.cs": {
+    "mtime": 1752183494.9089217,
+    "ast_hash": "30272f4a7b2c0f6eabc31d664cd3c570",
+    "semantic_hash": "30272f4a7b2c0f6eabc31d664cd3c570"
+  },
+  "FormRegistrarUsuario.cs": {
+    "mtime": 1781554283.5769556,
+    "ast_hash": "eb0cf5af837b2294da6f467ef50a60fb",
+    "semantic_hash": "eb0cf5af837b2294da6f467ef50a60fb"
+  },
+  "FormReporte.Designer.cs": {
+    "mtime": 1761083386.6283805,
+    "ast_hash": "27b470594a8b5cc92570706f1380e048",
+    "semantic_hash": "27b470594a8b5cc92570706f1380e048"
+  },
+  "FormReporte.cs": {
+    "mtime": 1779704966.5401323,
+    "ast_hash": "f97f8d318cb7cbd28da71bb20de1e850",
+    "semantic_hash": "f97f8d318cb7cbd28da71bb20de1e850"
+  },
+  "FormReporteDestajosSemana.cs": {
+    "mtime": 1779748930.1299264,
+    "ast_hash": "5866d4955d65d78be5e4f92c50849ad4",
+    "semantic_hash": "5866d4955d65d78be5e4f92c50849ad4"
+  },
+  "FormReporteNomina.cs": {
+    "mtime": 1781610063.4537604,
+    "ast_hash": "5ed53fd3892d60d7894092f58ebd2b42",
+    "semantic_hash": "5ed53fd3892d60d7894092f58ebd2b42"
+  },
+  "FormRepositorioDestajos.Designer.cs": {
+    "mtime": 1777407389.8907459,
+    "ast_hash": "d9606ac75b8952e5ec05118000256804",
+    "semantic_hash": "d9606ac75b8952e5ec05118000256804"
+  },
+  "FormRepositorioDestajos.cs": {
+    "mtime": 1779704968.6012857,
+    "ast_hash": "bebbb8367d47762be8341b7866a06fef",
+    "semantic_hash": "bebbb8367d47762be8341b7866a06fef"
+  },
+  "FormRepositorioPDFs.Designer.cs": {
+    "mtime": 1763070925.9521942,
+    "ast_hash": "ff6cd598e4446d6072b50ce4308bef00",
+    "semantic_hash": "ff6cd598e4446d6072b50ce4308bef00"
+  },
+  "FormRepositorioPDFs.cs": {
+    "mtime": 1779704973.2860937,
+    "ast_hash": "fe9ed1018bc6047fb395b4a19d1cb2d9",
+    "semantic_hash": "fe9ed1018bc6047fb395b4a19d1cb2d9"
+  },
+  "FormRepositorioPDFsOrdenesCompra.Designer.cs": {
+    "mtime": 1763507215.2145898,
+    "ast_hash": "66813a5febb911dc9af5886deb9e10fe",
+    "semantic_hash": "66813a5febb911dc9af5886deb9e10fe"
+  },
+  "FormRepositorioPDFsOrdenesCompra.cs": {
+    "mtime": 1781688047.8982613,
+    "ast_hash": "66c1237253abe531fcc53ec78d215fe0",
+    "semantic_hash": "66c1237253abe531fcc53ec78d215fe0"
+  },
+  "FormRepositorioValesSalida.Designer.cs": {
+    "mtime": 1769109974.684391,
+    "ast_hash": "a402349362f49fb5798d7678fc7a90b2",
+    "semantic_hash": "a402349362f49fb5798d7678fc7a90b2"
+  },
+  "FormRepositorioValesSalida.cs": {
+    "mtime": 1769109995.2627902,
+    "ast_hash": "48d4e0cc506c88f446268ad41dc43913",
+    "semantic_hash": "48d4e0cc506c88f446268ad41dc43913"
+  },
+  "FormRutaCritica.Designer.cs": {
+    "mtime": 1781552598.8552074,
+    "ast_hash": "31fdcac6e02ef549eec9942b882d8b65",
+    "semantic_hash": "31fdcac6e02ef549eec9942b882d8b65"
+  },
+  "FormRutaCritica.cs": {
+    "mtime": 1779704975.9170187,
+    "ast_hash": "2f4e2405ee6aac1cd2a0f29c288d11f0",
+    "semantic_hash": "2f4e2405ee6aac1cd2a0f29c288d11f0"
+  },
+  "FormSeleccionarTitulo.Designer.cs": {
+    "mtime": 1762205646.1381106,
+    "ast_hash": "c46c0dfa425aa5a17cba2e83eef1706e",
+    "semantic_hash": "c46c0dfa425aa5a17cba2e83eef1706e"
+  },
+  "FormSeleccionarTitulo.cs": {
+    "mtime": 1779704977.7032492,
+    "ast_hash": "00e843ad37c49f030644233bc08edbf5",
+    "semantic_hash": "00e843ad37c49f030644233bc08edbf5"
+  },
+  "FormSplash.Designer.cs": {
+    "mtime": 1759264054.975808,
+    "ast_hash": "c0904bd89d134408e5efacddf22c8132",
+    "semantic_hash": "c0904bd89d134408e5efacddf22c8132"
+  },
+  "FormSplash.cs": {
+    "mtime": 1779878283.6341321,
+    "ast_hash": "51c62c96582f2c771b0d670cd769c324",
+    "semantic_hash": "51c62c96582f2c771b0d670cd769c324"
+  },
+  "FormVisorRecibosNomina.cs": {
+    "mtime": 1781610117.8638587,
+    "ast_hash": "749308eeb4ceb8b0e4ff82ed2995cfdc",
+    "semantic_hash": "749308eeb4ceb8b0e4ff82ed2995cfdc"
+  },
+  "GenerarExplosionInsumosPDF.cs": {
+    "mtime": 1759271293.6440625,
+    "ast_hash": "5bb0f8a277a78ff0b9b2912c4a9f8474",
+    "semantic_hash": "5bb0f8a277a78ff0b9b2912c4a9f8474"
+  },
+  "GestorEvidencias.cs": {
+    "mtime": 1781725855.5463066,
+    "ast_hash": "8b1e64505b50dc8b197018e7f92cbc1d",
+    "semantic_hash": "8b1e64505b50dc8b197018e7f92cbc1d"
+  },
+  "GestorFotosConcepto.cs": {
+    "mtime": 1781725855.582307,
+    "ast_hash": "8e3cb3a1c5e0a4d48033152aded2203b",
+    "semantic_hash": "8e3cb3a1c5e0a4d48033152aded2203b"
+  },
+  "Global.cs": {
+    "mtime": 1780367381.0109906,
+    "ast_hash": "a4ee702156ab6e8d1c116fa2dfd28150",
+    "semantic_hash": "a4ee702156ab6e8d1c116fa2dfd28150"
+  },
+  "InventarioService.cs": {
+    "mtime": 1761095018.3030496,
+    "ast_hash": "af35d3741928076d4a8b98facec823b1",
+    "semantic_hash": "af35d3741928076d4a8b98facec823b1"
+  },
+  "NewFeatureBadge.cs": {
+    "mtime": 1782475880.3332567,
+    "ast_hash": "797fa873872453e5f37f4e334657bcba",
+    "semantic_hash": "797fa873872453e5f37f4e334657bcba"
+  },
+  "NodoCategoria.cs": {
+    "mtime": 1763060600.3815029,
+    "ast_hash": "a97644f61da86d98892f990ceec4f599",
+    "semantic_hash": "a97644f61da86d98892f990ceec4f599"
+  },
+  "NodoConcepto.cs": {
+    "mtime": 1770769834.1349862,
+    "ast_hash": "6cac4906ff0d0a238ae14753b11b20dd",
+    "semantic_hash": "6cac4906ff0d0a238ae14753b11b20dd"
+  },
+  "NodoTree.cs": {
+    "mtime": 1783011909.589414,
+    "ast_hash": "b9633ec76311c121f5bfc651493b6a5b",
+    "semantic_hash": "b9633ec76311c121f5bfc651493b6a5b"
+  },
+  "NumeroALetras.cs": {
+    "mtime": 1778781957.9689775,
+    "ast_hash": "0a4f49f94094966ebf2f28dbc121e3dc",
+    "semantic_hash": "0a4f49f94094966ebf2f28dbc121e3dc"
+  },
+  "PanelPrincipal.Designer.cs": {
+    "mtime": 1779791724.044618,
+    "ast_hash": "375548fbb7bba3633ad272bfaff186e0",
+    "semantic_hash": "375548fbb7bba3633ad272bfaff186e0"
+  },
+  "PanelPrincipal.ModernExtensions.cs": {
+    "mtime": 1779791738.9163668,
+    "ast_hash": "7da1dfe16618403b7852a64a6cdd5aab",
+    "semantic_hash": "7da1dfe16618403b7852a64a6cdd5aab"
+  },
+  "PanelPrincipal.cs": {
+    "mtime": 1784867251.0439672,
+    "ast_hash": "979c8e9d1aa9dc444b1e4284ddd9d82a",
+    "semantic_hash": "979c8e9d1aa9dc444b1e4284ddd9d82a"
+  },
+  "PanelPrincipal_ModernUI.cs": {
+    "mtime": 1779829144.5192583,
+    "ast_hash": "2ec2b0ab2acb4c83f04119b4b1551f0f",
+    "semantic_hash": "2ec2b0ab2acb4c83f04119b4b1551f0f"
+  },
+  "PartidaConcepto.cs": {
+    "mtime": 1770768143.738552,
+    "ast_hash": "9ee381823b88d8cc0274fc5a48883b44",
+    "semantic_hash": "9ee381823b88d8cc0274fc5a48883b44"
+  },
+  "PartidaDinamica.cs": {
+    "mtime": 1770775731.5350914,
+    "ast_hash": "819e93e7346bafc5f59044037f5baa12",
+    "semantic_hash": "819e93e7346bafc5f59044037f5baa12"
+  },
+  "PasswordHasher.cs": {
+    "mtime": 1781554216.8160985,
+    "ast_hash": "2551206ba0b1f849f3422d699c2cdb7f",
+    "semantic_hash": "2551206ba0b1f849f3422d699c2cdb7f"
+  },
+  "Program.cs": {
+    "mtime": 1782460383.345023,
+    "ast_hash": "aac7eb55a8697d910241768bda72289b",
+    "semantic_hash": "aac7eb55a8697d910241768bda72289b"
+  },
+  "PromptCantidad.Designer.cs": {
+    "mtime": 1750101067.4750316,
+    "ast_hash": "cc32fe497d6f4420082bba57507bf3b7",
+    "semantic_hash": "cc32fe497d6f4420082bba57507bf3b7"
+  },
+  "PromptCantidad.cs": {
+    "mtime": 1779705179.596184,
+    "ast_hash": "bcf8d3973d43a26b95b0768bd11d8302",
+    "semantic_hash": "bcf8d3973d43a26b95b0768bd11d8302"
+  },
+  "PromptJustificacion.Designer.cs": {
+    "mtime": 1782530963.2522676,
+    "ast_hash": "04d1b2b2b58b51d19670a27d4301634e",
+    "semantic_hash": "04d1b2b2b58b51d19670a27d4301634e"
+  },
+  "PromptJustificacion.cs": {
+    "mtime": 1782531626.2143834,
+    "ast_hash": "75d4a204c7fbf7ce0af27fad5ec25224",
+    "semantic_hash": "75d4a204c7fbf7ce0af27fad5ec25224"
+  },
+  "Properties/AssemblyInfo.cs": {
+    "mtime": 1762208175.682539,
+    "ast_hash": "4bfeeb49ab1074183969deb1a332b8bc",
+    "semantic_hash": "4bfeeb49ab1074183969deb1a332b8bc"
+  },
+  "Properties/Resources.Designer.cs": {
+    "mtime": 1763506598.1729615,
+    "ast_hash": "9a309f239e7715ef43863b3a5566fcec",
+    "semantic_hash": "9a309f239e7715ef43863b3a5566fcec"
+  },
+  "Properties/Settings.Designer.cs": {
+    "mtime": 1783748330.3954866,
+    "ast_hash": "29002ec22f46d80f06aca16588778cb3",
+    "semantic_hash": "29002ec22f46d80f06aca16588778cb3"
+  },
+  "Reportes.cs": {
+    "mtime": 1756258007.3638463,
+    "ast_hash": "d50ce75a9314ff40fb17e389b9d96a08",
+    "semantic_hash": "d50ce75a9314ff40fb17e389b9d96a08"
+  },
+  "Resizer.cs": {
+    "mtime": 1751308942.3802655,
+    "ast_hash": "5b97a34367abb6c34fc759b1e2e2102a",
+    "semantic_hash": "5b97a34367abb6c34fc759b1e2e2102a"
+  },
+  "SQL_ADD_FechaFinalizacion.sql": {
+    "mtime": 1762997061.0613973,
+    "ast_hash": "ba4ebff74044575073419808edfa73fd",
+    "semantic_hash": "ba4ebff74044575073419808edfa73fd"
+  },
+  "SQL_AgregarCodigo_EstimacionConcepto.sql": {
+    "mtime": 1763061283.2636638,
+    "ast_hash": "2dfbd1f3f4e9810d8f3431928f61ef7b",
+    "semantic_hash": "2dfbd1f3f4e9810d8f3431928f61ef7b"
+  },
+  "SQL_AgregarCodigo_PresupuestoObra.sql": {
+    "mtime": 1763061087.5039926,
+    "ast_hash": "93a895d93d3c25fa02e9392e10a313eb",
+    "semantic_hash": "93a895d93d3c25fa02e9392e10a313eb"
+  },
+  "SQL_AgregarConceptoImporteAvanceManualObra.sql": {
+    "mtime": 1762471945.7463033,
+    "ast_hash": "bf2bc07cbfd8a12f6c49ef997a09385e",
+    "semantic_hash": "bf2bc07cbfd8a12f6c49ef997a09385e"
+  },
+  "SQL_CORREGIR_MAYUSCULAS.sql": {
+    "mtime": 1762370160.5591903,
+    "ast_hash": "c16f623ccbd2feda6331b920fe7e7b8e",
+    "semantic_hash": "c16f623ccbd2feda6331b920fe7e7b8e"
+  },
+  "SQL_CORREGIR_TablaAvanceManual.sql": {
+    "mtime": 1762373202.4468522,
+    "ast_hash": "8950d2f949f64c44756babc86818a752",
+    "semantic_hash": "8950d2f949f64c44756babc86818a752"
+  },
+  "SQL_CREAR_TablasOrdenesCompra.sql": {
+    "mtime": 1763501528.5888405,
+    "ast_hash": "278566ab638ffff6d1b533e6b30eeeda",
+    "semantic_hash": "278566ab638ffff6d1b533e6b30eeeda"
+  },
+  "SQL_CorregirPrototipos.sql": {
+    "mtime": 1762369694.5442107,
+    "ast_hash": "512b913b7dcfba318a6781d392ed7cdc",
+    "semantic_hash": "512b913b7dcfba318a6781d392ed7cdc"
+  },
+  "SQL_CrearColumnaConceptoAvanceManualObra.sql": {
+    "mtime": 1762471952.1228764,
+    "ast_hash": "1f8fd7a4038119c82aac00c91a1a1c0f",
+    "semantic_hash": "1f8fd7a4038119c82aac00c91a1a1c0f"
+  },
+  "SQL_CrearEImportarPresupuesto.sql": {
+    "mtime": 1762369790.4118352,
+    "ast_hash": "5b58d6a32029336fe4437e138dd927fb",
+    "semantic_hash": "5b58d6a32029336fe4437e138dd927fb"
+  },
+  "SQL_CrearEstructuraCompleta.sql": {
+    "mtime": 1762464667.0590906,
+    "ast_hash": "8e8bb5df18de8511a1f5844a2edf6733",
+    "semantic_hash": "8e8bb5df18de8511a1f5844a2edf6733"
+  },
+  "SQL_CrearTablaAvanceManual.sql": {
+    "mtime": 1762373179.886342,
+    "ast_hash": "ca3f4406c21cd9700d5fad6f28402020",
+    "semantic_hash": "ca3f4406c21cd9700d5fad6f28402020"
+  },
+  "SQL_CrearTablaEvidencias.sql": {
+    "mtime": 1762464508.5729284,
+    "ast_hash": "8ebdd97e9e57235562bbff2d0c2a7fd8",
+    "semantic_hash": "8ebdd97e9e57235562bbff2d0c2a7fd8"
+  },
+  "SQL_CrearTablaPDFsDestajos.sql": {
+    "mtime": 1777407226.5121727,
+    "ast_hash": "4e64226c977a2705a486dcc77efe079e",
+    "semantic_hash": "4e64226c977a2705a486dcc77efe079e"
+  },
+  "SQL_CrearTablasFoliosYPDFs.sql": {
+    "mtime": 1763069683.6065845,
+    "ast_hash": "ea7106174899bad2e33f07c5faacc52d",
+    "semantic_hash": "ea7106174899bad2e33f07c5faacc52d"
+  },
+  "SQL_CrearTablasRepositorioPDFsOrdenesCompra.sql": {
+    "mtime": 1763501850.2217412,
+    "ast_hash": "c2ad254a139cebe8eaa009702851b89e",
+    "semantic_hash": "c2ad254a139cebe8eaa009702851b89e"
+  },
+  "SQL_DIAGNOSTICO_CAST_WBS.sql": {
+    "mtime": 1763261969.329848,
+    "ast_hash": "6a166295bc5e5f08f8feb33ece88e721",
+    "semantic_hash": "6a166295bc5e5f08f8feb33ece88e721"
+  },
+  "SQL_DIAGNOSTICO_COMPLETO.sql": {
+    "mtime": 1762373654.7204802,
+    "ast_hash": "b948d2b1a4c1f3a4e23678a66ab72a3d",
+    "semantic_hash": "b948d2b1a4c1f3a4e23678a66ab72a3d"
+  },
+  "SQL_DIAGNOSTICO_COSTOS_CERO.sql": {
+    "mtime": 1762374310.1830337,
+    "ast_hash": "b4141aceb876f87c1b88553fe9e27370",
+    "semantic_hash": "b4141aceb876f87c1b88553fe9e27370"
+  },
+  "SQL_DIAGNOSTICO_ConceptosGuardados.sql": {
+    "mtime": 1763261725.335642,
+    "ast_hash": "8292dfb8b77e93147fc998d3ed893a00",
+    "semantic_hash": "8292dfb8b77e93147fc998d3ed893a00"
+  },
+  "SQL_DIAGNOSTICO_OrdenCategorias.sql": {
+    "mtime": 1763067989.8133938,
+    "ast_hash": "bd6b021dff51661a2e323c0e631335bd",
+    "semantic_hash": "bd6b021dff51661a2e323c0e631335bd"
+  },
+  "SQL_DatosEjemploAvanceObra.sql": {
+    "mtime": 1762378481.4600222,
+    "ast_hash": "9894280a04e36d6d810310533a8c0537",
+    "semantic_hash": "9894280a04e36d6d810310533a8c0537"
+  },
+  "SQL_ELIMINAR_OrdenesCompra.sql": {
+    "mtime": 1763531628.091006,
+    "ast_hash": "8097b8caf609a1714d4c10354b0b60fb",
+    "semantic_hash": "8097b8caf609a1714d4c10354b0b60fb"
+  },
+  "SQL_IMPORTAR_SIMPLE.sql": {
+    "mtime": 1762372384.461822,
+    "ast_hash": "8aaca8debfa264e934f2d5951e028e87",
+    "semantic_hash": "8aaca8debfa264e934f2d5951e028e87"
+  },
+  "SQL_INSERTAR_ConceptosCompletados_M5L2.sql": {
+    "mtime": 1763261847.310573,
+    "ast_hash": "d4816965903a574f8a3b0f72d11e2100",
+    "semantic_hash": "d4816965903a574f8a3b0f72d11e2100"
+  },
+  "SQL_INSERTAR_DATOS_TUNERA.sql": {
+    "mtime": 1762374351.3464997,
+    "ast_hash": "8e6436172ff911a22b81fdd272b2fa00",
+    "semantic_hash": "8e6436172ff911a22b81fdd272b2fa00"
+  },
+  "SQL_InicializarDatosAvanceObra.sql": {
+    "mtime": 1762219863.6926935,
+    "ast_hash": "29a753a4301368531d87ca4db4dfb163",
+    "semantic_hash": "29a753a4301368531d87ca4db4dfb163"
+  },
+  "SQL_LIMPIAR_AvanceOrdenesCompra.sql": {
+    "mtime": 1763501109.1186483,
+    "ast_hash": "83978a64f135f6335d59005ff6a8d1e7",
+    "semantic_hash": "83978a64f135f6335d59005ff6a8d1e7"
+  },
+  "SQL_MIGRAR_AvanceManual_AddMonto.sql": {
+    "mtime": 1762480459.8236437,
+    "ast_hash": "c2d005808a69503d2774a16ec89a98ba",
+    "semantic_hash": "c2d005808a69503d2774a16ec89a98ba"
+  },
+  "SQL_RESETEAR_AzureSQL.sql": {
+    "mtime": 1763501358.4451208,
+    "ast_hash": "fbd4170fdfb3d13c4658bb781870597a",
+    "semantic_hash": "fbd4170fdfb3d13c4658bb781870597a"
+  },
+  "SQL_RESETEAR_OrdenesCompra_RAPIDO.sql": {
+    "mtime": 1763501259.9963043,
+    "ast_hash": "688425085a6837195b129556e81979ea",
+    "semantic_hash": "688425085a6837195b129556e81979ea"
+  },
+  "SQL_SCRIPTS/AgregarCamposColumnasCalculadas.sql": {
+    "mtime": 1773272978.413763,
+    "ast_hash": "1c650b0778da367a3c636e721d8165ef",
+    "semantic_hash": "1c650b0778da367a3c636e721d8165ef"
+  },
+  "SQL_SCRIPTS/AgregarColumnaLimiteM2.sql": {
+    "mtime": 1770754299.9546733,
+    "ast_hash": "9550d12f3ad791bd10a4c58647bd7b34",
+    "semantic_hash": "9550d12f3ad791bd10a4c58647bd7b34"
+  },
+  "SQL_SCRIPTS/AgregarColumnaMetrosCuadradosAvance.sql": {
+    "mtime": 1770172913.7848778,
+    "ast_hash": "7c09a066d9c0bab49879b5ded8f58cb8",
+    "semantic_hash": "7c09a066d9c0bab49879b5ded8f58cb8"
+  },
+  "SQL_SCRIPTS/AgregarColumnaPrototiposAplicables.sql": {
+    "mtime": 1770768742.4056723,
+    "ast_hash": "c3900775074799f0cacc281146915559",
+    "semantic_hash": "c3900775074799f0cacc281146915559"
+  },
+  "SQL_SCRIPTS/AgregarColumnaTipoTarea.sql": {
+    "mtime": 1772742829.1585987,
+    "ast_hash": "dba2da48530e4eaf08c4eb21727fdde7",
+    "semantic_hash": "dba2da48530e4eaf08c4eb21727fdde7"
+  },
+  "SQL_SCRIPTS/AgregarColumnaWBSFoliosDetalle.sql": {
+    "mtime": 1771016951.6634731,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "SQL_SCRIPTS/AgregarColumnasDinamicas.sql": {
+    "mtime": 1770161051.6966596,
+    "ast_hash": "dd81ceeae30395a9ef477e40e0e25f67",
+    "semantic_hash": "dd81ceeae30395a9ef477e40e0e25f67"
+  },
+  "SQL_SCRIPTS/AgregarColumnasLimiteM2Prototipo.sql": {
+    "mtime": 1770768780.5784166,
+    "ast_hash": "219ab18739ec16045451aac5b9611d41",
+    "semantic_hash": "219ab18739ec16045451aac5b9611d41"
+  },
+  "SQL_SCRIPTS/AgregarColumnasPrecioSalidas.sql": {
+    "mtime": 1769105870.516384,
+    "ast_hash": "4eb6e84e81c9d33ff5448fb1a59c39d1",
+    "semantic_hash": "4eb6e84e81c9d33ff5448fb1a59c39d1"
+  },
+  "SQL_SCRIPTS/AgregarIdPresupuestoObraAFoliosDetalle.sql": {
+    "mtime": 1771018680.295092,
+    "ast_hash": "b32d5e93dfb18a7816ea0e82aa670db2",
+    "semantic_hash": "b32d5e93dfb18a7816ea0e82aa670db2"
+  },
+  "SQL_SCRIPTS/AgregarNombreOrdenesCompra.sql": {
+    "mtime": 1769107510.2855399,
+    "ast_hash": "6065802fc2fb801fcd8bc61aca3bae57",
+    "semantic_hash": "6065802fc2fb801fcd8bc61aca3bae57"
+  },
+  "SQL_SCRIPTS/AlmacenLiberacionDestajos.sql": {
+    "mtime": 1782374364.2220664,
+    "ast_hash": "bccdfa9028b080e47501198dbaa4223a",
+    "semantic_hash": "bccdfa9028b080e47501198dbaa4223a"
+  },
+  "SQL_SCRIPTS/Centralizacion_01_Diagnostico_Insumos.sql": {
+    "mtime": 1782399896.6297026,
+    "ast_hash": "7986b1dbd15e0fd67896032749d43e4e",
+    "semantic_hash": "7986b1dbd15e0fd67896032749d43e4e"
+  },
+  "SQL_SCRIPTS/Centralizacion_02_Backfill_CatalogoInsumos.sql": {
+    "mtime": 1782400164.637519,
+    "ast_hash": "b76d9b360f8002ffe3f7ff1285cd91f4",
+    "semantic_hash": "b76d9b360f8002ffe3f7ff1285cd91f4"
+  },
+  "SQL_SCRIPTS/Centralizacion_03_Vistas_Compatibilidad_COMPRAS.sql": {
+    "mtime": 1782400194.175622,
+    "ast_hash": "0e6d983df945ed61b81cff3e2bd80832",
+    "semantic_hash": "0e6d983df945ed61b81cff3e2bd80832"
+  },
+  "SQL_SCRIPTS/CorregirWBSDuplicados.sql": {
+    "mtime": 1770784282.003937,
+    "ast_hash": "7f4fe9497cc2ca2bece5643690459dc6",
+    "semantic_hash": "7f4fe9497cc2ca2bece5643690459dc6"
+  },
+  "SQL_SCRIPTS/CrearTablaActivacionTareasRuta.sql": {
+    "mtime": 1776890224.8945856,
+    "ast_hash": "63164bcd38ddd06f7f9fe11f81302ff2",
+    "semantic_hash": "63164bcd38ddd06f7f9fe11f81302ff2"
+  },
+  "SQL_SCRIPTS/CrearTablasRepositorioSalidasAlmacen.sql": {
+    "mtime": 1769109612.069191,
+    "ast_hash": "49dadc7e294c0d8a76554906d11842a4",
+    "semantic_hash": "49dadc7e294c0d8a76554906d11842a4"
+  },
+  "SQL_SCRIPTS/CrearTablasRutaCalandraDestajo.sql": {
+    "mtime": 1772744619.2568922,
+    "ast_hash": "f63a1822d1fb225d182faff077cd0639",
+    "semantic_hash": "f63a1822d1fb225d182faff077cd0639"
+  },
+  "SQL_SCRIPTS/CrearTablasTreeList.sql": {
+    "mtime": 1772673291.8268392,
+    "ast_hash": "3d104961cef1b121109658c699c78dec",
+    "semantic_hash": "3d104961cef1b121109658c699c78dec"
+  },
+  "SQL_SCRIPTS/CrearVinculoPermanenteWBS.sql": {
+    "mtime": 1770781692.4352658,
+    "ast_hash": "1ee5a9281cc4b5a359aef77f3bf307a5",
+    "semantic_hash": "1ee5a9281cc4b5a359aef77f3bf307a5"
+  },
+  "SQL_SCRIPTS/Destajos_AdjuntarClavePorNombre.sql": {
+    "mtime": 1782533754.6384597,
+    "ast_hash": "2130aec67b5d0895e0ead6abcbd1a2c2",
+    "semantic_hash": "2130aec67b5d0895e0ead6abcbd1a2c2"
+  },
+  "SQL_SCRIPTS/DiagnosticoAvanceManualObra.sql": {
+    "mtime": 1770215936.5844676,
+    "ast_hash": "a510e8374e14f4ae485e665d2edb4970",
+    "semantic_hash": "a510e8374e14f4ae485e665d2edb4970"
+  },
+  "SQL_SCRIPTS/DiagnosticoVinculosWBS.sql": {
+    "mtime": 1770781091.6849506,
+    "ast_hash": "bd2ddf30eb3b8394bf4359c383344403",
+    "semantic_hash": "bd2ddf30eb3b8394bf4359c383344403"
+  },
+  "SQL_SCRIPTS/DiagnosticoYCorreccionWBS.sql": {
+    "mtime": 1770776074.804014,
+    "ast_hash": "6862ebcdb94a260ffc63e7101998644d",
+    "semantic_hash": "6862ebcdb94a260ffc63e7101998644d"
+  },
+  "SQL_SCRIPTS/DuplicarRutaTuneraACalandra.sql": {
+    "mtime": 1782373315.7821577,
+    "ast_hash": "a8375ddf494026a9f6ee23bad3a1171f",
+    "semantic_hash": "a8375ddf494026a9f6ee23bad3a1171f"
+  },
+  "SQL_SCRIPTS/ImportarExplosionTunera_InsumosTuneraEXP.sql": {
+    "mtime": 1782373036.3904073,
+    "ast_hash": "e6262b6753bdd40032b543cee83066bf",
+    "semantic_hash": "e6262b6753bdd40032b543cee83066bf"
+  },
+  "SQL_SCRIPTS/MigracionDesatajoActivado.sql": {
+    "mtime": 1777404714.3294294,
+    "ast_hash": "512f3fa7169f7d53876cdb252d0ddb82",
+    "semantic_hash": "512f3fa7169f7d53876cdb252d0ddb82"
+  },
+  "SQL_SCRIPTS/RecuperarAvancesPerdidos.sql": {
+    "mtime": 1770775174.3300698,
+    "ast_hash": "c936e16a40b89ab4d0bd8d8f88f74b20",
+    "semantic_hash": "c936e16a40b89ab4d0bd8d8f88f74b20"
+  },
+  "SQL_SCRIPTS/RenombrarTreeListDataARutaTunera.sql": {
+    "mtime": 1772745225.9476843,
+    "ast_hash": "9c157cbe49fa2cd8805255cb46a9b48d",
+    "semantic_hash": "9c157cbe49fa2cd8805255cb46a9b48d"
+  },
+  "SQL_SCRIPTS/VerificarEsquemaPresupuestoObra.sql": {
+    "mtime": 1770174681.7055044,
+    "ast_hash": "efb7a54573b0acd683359e5838ee696d",
+    "semantic_hash": "efb7a54573b0acd683359e5838ee696d"
+  },
+  "SQL_SCRIPTS/VincularProgresoExistente.sql": {
+    "mtime": 1770781050.9016857,
+    "ast_hash": "700cee0ced930f2e78bd8b89a2963f11",
+    "semantic_hash": "700cee0ced930f2e78bd8b89a2963f11"
+  },
+  "SQL_TRANSFORMAR_A_PRESUPUESTO.sql": {
+    "mtime": 1762372432.6465623,
+    "ast_hash": "d1ee77cb17c108a3f02b1bf3c6bea8db",
+    "semantic_hash": "d1ee77cb17c108a3f02b1bf3c6bea8db"
+  },
+  "SQL_UNIFICAR_AvanceConceptos.sql": {
+    "mtime": 1762398496.4049635,
+    "ast_hash": "f872b25867b259527c5f063efe321ea6",
+    "semantic_hash": "f872b25867b259527c5f063efe321ea6"
+  },
+  "SQL_VERIFICAR_AzureSQL.sql": {
+    "mtime": 1763501387.072129,
+    "ast_hash": "0d55eed1350d96be3a3162fac70366e2",
+    "semantic_hash": "0d55eed1350d96be3a3162fac70366e2"
+  },
+  "SQL_VERIFICAR_BaseDatos.sql": {
+    "mtime": 1763501275.7169645,
+    "ast_hash": "b3e7c890b1452eaab156a16fcadb746c",
+    "semantic_hash": "b3e7c890b1452eaab156a16fcadb746c"
+  },
+  "SQL_VerificacionRapida.sql": {
+    "mtime": 1762380808.7123992,
+    "ast_hash": "cb85efec25e5fafbd1c29922fc414106",
+    "semantic_hash": "cb85efec25e5fafbd1c29922fc414106"
+  },
+  "SQL_VerificarBaseDatos.sql": {
+    "mtime": 1762464522.6834779,
+    "ast_hash": "ad3864aa22fc885b5da92a9cdab3bbff",
+    "semantic_hash": "ad3864aa22fc885b5da92a9cdab3bbff"
+  },
+  "SQL_VerificarComprasIndirectas.sql": {
+    "mtime": 1762205803.850613,
+    "ast_hash": "acded0b1f68ba4ba51bcd27b0f1e268e",
+    "semantic_hash": "acded0b1f68ba4ba51bcd27b0f1e268e"
+  },
+  "SQL_VerificarEstimacionConcepto.sql": {
+    "mtime": 1762395112.5747678,
+    "ast_hash": "c464db1f54c4dbd22b0fd1bc918710d7",
+    "semantic_hash": "c464db1f54c4dbd22b0fd1bc918710d7"
+  },
+  "SQL_VerificarEstructuraConceptos.sql": {
+    "mtime": 1762394679.05409,
+    "ast_hash": "e4b6c391a9210d810e2d9d8ccf401136",
+    "semantic_hash": "e4b6c391a9210d810e2d9d8ccf401136"
+  },
+  "SQL_VerificarEstructuraFinal.sql": {
+    "mtime": 1762380551.981759,
+    "ast_hash": "d0cbf31a70f33b12da709aee789289ac",
+    "semantic_hash": "d0cbf31a70f33b12da709aee789289ac"
+  },
+  "SQL_VerificarEstructuraPresupuesto.sql": {
+    "mtime": 1762379955.8862169,
+    "ast_hash": "b249fe2082374d53c03730b4e75d6c42",
+    "semantic_hash": "b249fe2082374d53c03730b4e75d6c42"
+  },
+  "SQL_VerificarPresupuestoObra.sql": {
+    "mtime": 1762370017.2357318,
+    "ast_hash": "6b7ad471fcfd00f57eb675eefabecab4",
+    "semantic_hash": "6b7ad471fcfd00f57eb675eefabecab4"
+  },
+  "SQL_VerificarProveedores.sql": {
+    "mtime": 1762206641.3404267,
+    "ast_hash": "8a70def43e07ff519b7f00eea9f408ea",
+    "semantic_hash": "8a70def43e07ff519b7f00eea9f408ea"
+  },
+  "SQL_VerificarYAgregarFechaFinalizacion.sql": {
+    "mtime": 1763088491.1218479,
+    "ast_hash": "823d487756e9f6b3ab433e5dc5240ced",
+    "semantic_hash": "823d487756e9f6b3ab433e5dc5240ced"
+  },
+  "SafeTreeListView.cs": {
+    "mtime": 1781551823.5065875,
+    "ast_hash": "875489a64e4ed428df507222ee869b47",
+    "semantic_hash": "875489a64e4ed428df507222ee869b47"
+  },
+  "SalidaAlmacenService.cs": {
+    "mtime": 1782374611.0440252,
+    "ast_hash": "0750a40fcb8319901b485c69931c21de",
+    "semantic_hash": "0750a40fcb8319901b485c69931c21de"
+  },
+  "Test-AzureSQLConnection.ps1": {
+    "mtime": 1765485684.8587496,
+    "ast_hash": "6be99b904e507e574aa8075c78355ea6",
+    "semantic_hash": "6be99b904e507e574aa8075c78355ea6"
+  },
+  "ThemeManager.cs": {
+    "mtime": 1779749477.9326696,
+    "ast_hash": "b0fb34eb6934f9ac9b47a1a63d8d525c",
+    "semantic_hash": "b0fb34eb6934f9ac9b47a1a63d8d525c"
+  },
+  "TreeGridViewLite.cs": {
+    "mtime": 1759271107.3504844,
+    "ast_hash": "2732964cc8c1ea4820c2f90006a7b91b",
+    "semantic_hash": "2732964cc8c1ea4820c2f90006a7b91b"
+  },
+  "UpdateServer.cs": {
+    "mtime": 1761097229.5053086,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "coordenadas_mapa.json": {
+    "mtime": 1765313896.9990106,
+    "ast_hash": "d9cf14405778feb220528ca8f37ad41b",
+    "semantic_hash": "d9cf14405778feb220528ca8f37ad41b"
+  }
+}
