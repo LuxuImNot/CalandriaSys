@@ -180,7 +180,7 @@ namespace Calandria.Api.Controllers
         /// <summary>
         /// Registra, deduplicado por Uuid (folio fiscal del CFDI), que una factura se
         /// concilió usando el emparejador automático (IA) — es la base para facturar el
-        /// add-on a Pilaris. El mismo CFDI puede pasar por ConciliarFactura varias veces
+        /// add-on a CalandriaSys. El mismo CFDI puede pasar por ConciliarFactura varias veces
         /// mientras el usuario ajusta la conciliación antes de confirmar, así que no debe
         /// contarse más de una vez por Uuid. Comprobación de existencia antes del insert,
         /// respaldada por el constraint único UQ_ConciliacionesIaLog_Uuid para la carrera
@@ -218,7 +218,7 @@ namespace Calandria.Api.Controllers
         /// GET /api/ordenescompra/conciliaciones-ia/resumen?desde=&amp;hasta= — conteo de
         /// facturas conciliadas con el emparejador IA en el rango y el monto a cobrar del
         /// add-on ($18 MXN/factura, mínimo $500 MXN/mes). Es información de facturación
-        /// del proveedor del sistema (Pilaris), no del cliente: requiere sistema.facturacion,
+        /// del proveedor del sistema (CalandriaSys), no del cliente: requiere sistema.facturacion,
         /// que no debe estar en el perfil de un usuario normal de compras.
         /// </summary>
         [HttpGet, Route("conciliaciones-ia/resumen"), RequierePermiso("sistema.facturacion")]

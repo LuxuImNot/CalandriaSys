@@ -233,6 +233,26 @@ namespace DynamicSepticSystem
             public decimal ejec;
             public decimal presup;
             public int dias;
+            public int activados;
+            public DateTime? ultima;
+        }
+
+        /// <summary>Último push al panel, para no repetirlo en cada activación.</summary>
+        private DateTime ultimoRefrescoPanel = DateTime.MinValue;
+
+        /// <summary>
+        /// Los destajos se marcan en OTRAS ventanas (Destajos, Avance Masivo), que
+        /// se abren con Show() y no avisan al volver: sin esto el tablero se queda
+        /// con el progreso de cuando cargó la página.
+        /// </summary>
+        protected override void OnActivated(EventArgs e)
+        {
+            base.OnActivated(e);
+            if (!webPanelListo) return;
+            // ponytail: throttle por tiempo; si hiciera falta exactitud, que las
+            // ventanas de destajos avisen al cerrar.
+            if ((DateTime.Now - ultimoRefrescoPanel).TotalSeconds < 5) return;
+            EnviarDatosAlPanel();
         }
 
         /// <summary>
@@ -240,14 +260,24 @@ namespace DynamicSepticSystem
         /// (coordenadas_mapa.json, el mismo origen que usa el mapa clásico) y su
         /// progreso real (ActivacionTareasRuta, vía api/destajos/resumen-casas).
         /// </summary>
-        private void EnviarDatosAlPanel()
+        private async void EnviarDatosAlPanel()
         {
             if (!webPanelListo || webPanel?.CoreWebView2 == null) return;
+            ultimoRefrescoPanel = DateTime.Now;
 
             try
             {
-                var lista = LeerCoordenadasParaWeb();
-                AplicarResumenReal(lista);
+                // El resumen viaja por HTTP (118 casas): fuera del hilo de UI para
+                // que refrescar no congele la ventana.
+                var lista = await Task.Run(() =>
+                {
+                    var casas = LeerCoordenadasParaWeb();
+                    AplicarResumenReal(casas);
+                    return casas;
+                });
+
+                if (IsDisposed || webPanel?.CoreWebView2 == null) return;
+
                 var carga = new
                 {
                     tipo = "datos",
@@ -261,6 +291,11 @@ namespace DynamicSepticSystem
                     casas = lista
                 };
                 webPanel.CoreWebView2.PostWebMessageAsJson(JsonConvert.SerializeObject(carga));
+
+                // El plano abierto aparte mira las mismas casas: si no se le
+                // refresca aqui, se queda con el progreso de hace un rato.
+                if (_sembrado != null && !_sembrado.IsDisposed)
+                    _sembrado.EnviarCasas(lista, txtManzana.Text, txtLote.Text);
             }
             catch (Exception ex)
             {
@@ -368,6 +403,8 @@ namespace DynamicSepticSystem
                     c.comp = r.Terminados;
                     c.ejec = r.ImporteTerminado;
                     c.presup = r.ImporteTotal;
+                    c.activados = r.Activados;
+                    c.ultima = r.UltimaActualizacion;
                     c.dias = r.UltimaActualizacion.HasValue
                         ? Math.Max(0, (int)(DateTime.Now - r.UltimaActualizacion.Value).TotalDays)
                         : 0;
@@ -376,6 +413,150 @@ namespace DynamicSepticSystem
             catch (Exception ex)
             {
                 ErrorLogger.RegistrarMensaje("PanelWeb", "No se pudo traer el progreso real de las casas: " + ex.Message);
+            }
+        }
+
+
+        // ------------------------------------------------------------------
+        // Plano de sembrado en ventana aparte
+        // ------------------------------------------------------------------
+
+        /// <summary>Ventana del plano. Una sola: si ya esta abierta, se trae al frente.</summary>
+        private FormSembradoWeb _sembrado;
+
+        /// <summary>
+        /// Abre (o reenfoca) el plano de sembrado. Show(), nunca ShowDialog():
+        /// este formulario tambien hospeda un WebView2 y dos bucles modales
+        /// anidados cuelgan el proceso (ver reference_webview2_multi_instance).
+        /// </summary>
+        private void AbrirSembradoWeb()
+        {
+            if (_sembrado != null && !_sembrado.IsDisposed)
+            {
+                if (_sembrado.WindowState == FormWindowState.Minimized)
+                    _sembrado.WindowState = FormWindowState.Normal;
+                _sembrado.Activate();
+                return;
+            }
+
+            var plano = new FormSembradoWeb();
+            _sembrado = plano;
+
+            // La pagina avisa cuando puede recibir datos; hasta entonces el push
+            // se perderia (NavigateToString todavia no termino).
+            plano.PlanoListo += (s, e) =>
+            {
+                var lista = LeerCoordenadasParaWeb();
+                AplicarResumenReal(lista);
+                plano.EnviarCasas(lista, txtManzana.Text, txtLote.Text);
+                try { plano.EnviarTema(TemaObra.ObtenerParaPush()); } catch { /* cosmetico */ }
+            };
+
+            // Elegir en el plano deja la casa cargada igual que elegirla en el
+            // panel: misma ruta (btnBuscarCasa_Click) y aviso al tablero.
+            plano.CasaSeleccionada += (s, e) =>
+            {
+                txtManzana.Text = e.Manzana;
+                txtLote.Text = e.Lote;
+                btnBuscarCasa_Click(this, EventArgs.Empty);
+                PushAlPanel(new { tipo = "casa-seleccionada", manzana = e.Manzana, lote = e.Lote });
+            };
+
+            plano.FormClosed += (s, e) => { if (_sembrado == plano) _sembrado = null; };
+            plano.Show();
+        }
+
+        /// <summary>Envio corto al panel web; si no hay panel listo, no hace nada.</summary>
+        private void PushAlPanel(object carga)
+        {
+            if (!webPanelListo || webPanel?.CoreWebView2 == null) return;
+            try { webPanel.CoreWebView2.PostWebMessageAsJson(JsonConvert.SerializeObject(carga)); }
+            catch (Exception ex)
+            {
+                ErrorLogger.RegistrarMensaje("PanelWeb", "Fallo al enviar datos al panel web: " + ex.Message);
+            }
+        }
+
+        // ------------------------------------------------------------------
+        // Evidencias de la casa cargada (galeria del consultor)
+        // ------------------------------------------------------------------
+
+        /// <summary>Tope de fotos que viajan al panel de una vez. Ver nota abajo.</summary>
+        private const int MaxFotosPanel = 8;
+
+        private class FotoPanel
+        {
+            public int id;
+            public string titulo;
+            public DateTime fecha;
+            public string usuario;
+            public string dataUrl;
+        }
+
+        /// <summary>
+        /// Galeria del consultor de casa: el listado viene de api/evidencias y
+        /// cada binario de api/evidencias/{id}/foto, que se empaqueta como data
+        /// URL porque el WebView2 carga la pagina con NavigateToString y no puede
+        /// pedirle archivos al API por su cuenta (no lleva el token).
+        ///
+        /// ponytail: se mandan las 8 mas recientes en un solo mensaje. Si una obra
+        /// junta decenas de fotos por casa, conviene paginar o servirlas por
+        /// stream en vez de crecer el JSON.
+        /// </summary>
+        private async Task EnviarFotosCasaAlPanel(string manzana, string lote)
+        {
+            if (string.IsNullOrWhiteSpace(manzana) || string.IsNullOrWhiteSpace(lote)) return;
+
+            List<FotoPanel> fotos;
+            try
+            {
+                fotos = await Task.Run(() => LeerFotosCasa(manzana, lote));
+            }
+            catch (Exception ex)
+            {
+                ErrorLogger.RegistrarMensaje("PanelWeb", "No se pudieron traer las evidencias de la casa: " + ex.Message);
+                fotos = new List<FotoPanel>();
+            }
+
+            PushAlPanel(new { tipo = "casa-fotos", manzana, lote, fotos });
+        }
+
+        private static List<FotoPanel> LeerFotosCasa(string manzana, string lote)
+        {
+            var salida = new List<FotoPanel>();
+
+            var lista = ApiClient.Get<List<EvidenciaApi>>(
+                "/api/evidencias?manzana=" + Uri.EscapeDataString(manzana) +
+                "&lote=" + Uri.EscapeDataString(lote)) ?? new List<EvidenciaApi>();
+
+            foreach (var ev in lista.OrderByDescending(x => x.Fecha).Take(MaxFotosPanel))
+            {
+                byte[] bytes;
+                try { bytes = ApiClient.GetBytes("/api/evidencias/" + ev.Id + "/foto"); }
+                catch { continue; }
+                if (bytes == null || bytes.Length == 0) continue;
+
+                salida.Add(new FotoPanel
+                {
+                    id = ev.Id,
+                    titulo = ev.Titulo,
+                    fecha = ev.Fecha,
+                    usuario = ev.Usuario,
+                    dataUrl = "data:" + MimeDeExtension(ev.Extension) + ";base64," + Convert.ToBase64String(bytes)
+                });
+            }
+            return salida;
+        }
+
+        private static string MimeDeExtension(string ext)
+        {
+            switch ((ext ?? "").Trim().TrimStart('.').ToLowerInvariant())
+            {
+                case "png": return "image/png";
+                case "webp": return "image/webp";
+                case "gif": return "image/gif";
+                case "bmp": return "image/bmp";
+                default: return "image/jpeg";
             }
         }
 
@@ -410,7 +591,8 @@ namespace DynamicSepticSystem
                 // Las opciones [ADMIN] se validan aquí además de ocultarse en la
                 // página: el HTML llega del servidor, pero no manda sobre permisos.
                 if ((m.accion == "hard-progress" || m.accion == "mapear-coordenadas" ||
-                     m.accion == "log-errores" || m.accion == "editar-explosiones") && !Global.EsAdmin)
+                     m.accion == "log-errores" || m.accion == "editar-explosiones" ||
+                     m.accion == "inversion") && !Global.EsAdmin)
                 {
                     MessageBox.Show("Esta opción es sólo para el administrador.",
                         "Permisos", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -428,7 +610,10 @@ namespace DynamicSepticSystem
 
                 switch (m.accion)
                 {
-                    // --- plano ---
+                    // --- plano y tablero ---
+                    case "abrir-sembrado":      AbrirSembradoWeb();                break;
+                    case "casa-fotos":          _ = EnviarFotosCasaAlPanel(m.manzana, m.lote); break;
+
                     case "seleccion":
                         // Reutiliza la búsqueda del panel clásico para dejar
                         // casaActual y las etiquetas coherentes.
@@ -436,7 +621,7 @@ namespace DynamicSepticSystem
                         break;
 
                     // --- COMPRAS ---
-                    case "compra-multiple":     AbrirFormCompraMulti();            break;
+                    case "compra-multiple":     AbrirFormCompraMulti(m.manzana, m.lote); break;
                     case "compra-indirecta":    AbrirFormCompraIndirecta();        break;
                     case "consultar-ordenes":   AbrirRepositorioOrdenesCompra();   break;
 
@@ -444,7 +629,7 @@ namespace DynamicSepticSystem
                     case "almacen":             AbrirFormAlmacen();                break;
 
                     // --- OBRA ---
-                    case "destajos":            AbrirFormActivarTareasTreeList();  break;
+                    case "destajos":            AbrirFormActivarTareasTreeList(m.manzana, m.lote); break;
                     case "editor-tareas":       AbrirFormEditorTreeList();         break;
                     case "avance-partidas":     AbrirFormAvanceObra();             break;
                     case "avance-conceptos":    AbrirFormAvanceConcepto();         break;
@@ -452,6 +637,7 @@ namespace DynamicSepticSystem
                     case "ruta-critica":        AbrirFormRutaCritica();            break;
                     case "editar-explosiones":  AbrirFormEditarExplosiones();      break;
                     case "hard-progress":       AbrirFormHardProgress();           break;
+                    case "avance-masivo":       AbrirFormAvanceMasivo();           break;
                     case "mapear-coordenadas":  AbrirFormMapearCoordenadas();      break;
 
                     // --- EVIDENCIAS ---
@@ -463,7 +649,8 @@ namespace DynamicSepticSystem
                     case "perfiles":            AbrirFormPerfilTrabajador();       break;
 
                     // --- ADMINISTRATIVOS ---
-                    case "administrativos":     AbrirFormAdministrativos();        break;
+                    case "administrativos":     AbrirFormAdministrativos(m.manzana, m.lote); break;
+                    case "inversion":           AbrirFormInversionWeb();           break;
                     case "log-errores":         AbrirFormLogErrores();             break;
                     case "diagnostico":         btnDiagnosticoConexion_Click(this, EventArgs.Empty); break;
                     case "perfiles-permisos":   btnGestionPerfiles_Click(this, EventArgs.Empty); break;

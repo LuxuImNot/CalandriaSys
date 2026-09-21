@@ -134,7 +134,7 @@ namespace Calandria.Api.Models
     }
 
     /// <summary>
-    /// Resumen para facturar el add-on de "Conciliación de factura con IA" (Pilaris):
+    /// Resumen para facturar el add-on de "Conciliación de factura con IA" (CalandriaSys):
     /// cuántas facturas se conciliaron con el emparejador automático en el rango y el
     /// monto a cobrar ($18 MXN/factura, mínimo $500 MXN/mes por obra).
     /// </summary>

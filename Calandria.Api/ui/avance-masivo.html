@@ -78,17 +78,6 @@ p{color:var(--text-2); margin:0}
   box-shadow:var(--shadow-lg); padding:28px 30px; margin-bottom:24px;
 }
 
-.grid{display:grid; grid-template-columns:2fr 1fr; gap:16px}
-@media (max-width:640px){ .grid{grid-template-columns:1fr} }
-.field{margin-bottom:0}
-.field label{display:block; font-size:12px; font-weight:600; color:var(--text-2); margin-bottom:6px; letter-spacing:.02em}
-select, input[type=number]{
-  width:100%; height:42px; padding:0 12px; border:1.5px solid var(--rule); border-radius:var(--r);
-  background:var(--surface); color:var(--text); font-size:14px; font-family:inherit;
-  transition:border-color .15s ease, box-shadow .15s ease;
-}
-select:focus, input:focus{outline:none; border-color:var(--brass); box-shadow:0 0 0 3px var(--brass-soft)}
-
 button{font:inherit; cursor:pointer; border:none; border-radius:var(--r); padding:10px 22px; font-weight:600}
 .btn-primary{background:var(--brass); color:var(--on-ink)}
 .btn-primary:disabled{background:var(--rule); color:var(--text-3); cursor:not-allowed}
@@ -97,18 +86,30 @@ button{font:inherit; cursor:pointer; border:none; border-radius:var(--r); paddin
 .toolbar{display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; gap:10px; flex-wrap:wrap}
 .contador{font-size:12.5px; color:var(--text-3)}
 
-.casas{max-height:360px; overflow-y:auto; border:1px solid var(--rule-soft); border-radius:var(--r)}
-.manzana-grupo{border-bottom:1px solid var(--rule-soft)}
-.manzana-grupo:last-child{border-bottom:none}
-.manzana-cab{
+.paso-n{
+  display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px; border-radius:50%;
+  background:var(--brass); color:var(--on-ink); font-size:12px; font-weight:700; margin-right:8px; flex:none;
+}
+h2{display:flex; align-items:center}
+
+.arbol{max-height:360px; overflow-y:auto; border:1px solid var(--rule-soft); border-radius:var(--r)}
+.arbol.deshabilitado{opacity:.45; pointer-events:none}
+.grupo{border-bottom:1px solid var(--rule-soft)}
+.grupo:last-child{border-bottom:none}
+.grupo-cab{
   display:flex; align-items:center; gap:10px; padding:8px 12px; background:var(--surface-2);
   font-size:12px; font-weight:700; color:var(--text-2); letter-spacing:.02em; cursor:pointer;
 }
-.casa-fila{display:flex; align-items:center; gap:10px; padding:7px 12px 7px 30px; font-size:13px}
-.casa-fila:hover{background:var(--surface-2)}
-.casa-fila .lote{font-weight:600}
-.casa-fila .proto{color:var(--text-3); font-size:12px}
+.item-fila{display:flex; align-items:center; gap:10px; padding:7px 12px 7px 30px; font-size:13px}
+.item-fila:hover{background:var(--surface-2)}
+.item-fila .lote{font-weight:600}
+.item-fila .proto{color:var(--text-3); font-size:12px}
 input[type=checkbox]{width:16px; height:16px; accent-color:var(--brass)}
+.badge-hecho, .badge-parcial{margin-left:auto; font-size:11px; font-weight:700; padding:2px 8px; border-radius:999px; white-space:nowrap}
+.badge-hecho{color:var(--ok); background:var(--ok-bg)}
+.badge-parcial{color:var(--warn); background:var(--warn-bg)}
+
+.hint-bloqueado{color:var(--text-3); font-size:12.5px; margin:0 0 12px}
 
 .vacio{color:var(--text-3); font-size:13px; padding:16px}
 
@@ -132,38 +133,37 @@ input[type=checkbox]{width:16px; height:16px; accent-color:var(--brass)}
   <div class="head">
     <div>
       <h1>Avance Masivo</h1>
-      <p class="sub">Marca el % de avance de una partida en varias casas al mismo tiempo.</p>
+      <p class="sub">Finaliza uno o varios destajos en varias casas al mismo tiempo.</p>
     </div>
     <button class="volver" id="btnVolver">Volver</button>
   </div>
 
   <div class="aviso">
-    Esto sólo actualiza el avance de obra (partidas de Estimación). No activa, finaliza ni modifica destajos, cuadrillas ni compras.
+    Esto activa y finaliza destajos reales (mueve el Avance de Obra que ves en el mapa) con la cuadrilla genérica "ADMINISTRATIVO". Si un destajo tiene destajos anteriores sin terminar en su categoría, también se finalizan automáticamente para desbloquearlo.
   </div>
 
   <div class="card">
-    <h2>Partida y avance</h2>
-    <div class="grid">
-      <div class="field">
-        <label for="fPartida">Partida</label>
-        <select id="fPartida"><option value="">Cargando…</option></select>
-      </div>
-      <div class="field">
-        <label for="fAvance">Avance %</label>
-        <input type="number" id="fAvance" min="0" max="100" step="0.5" value="100">
-      </div>
-    </div>
-  </div>
-
-  <div class="card">
-    <h2>Casas</h2>
+    <h2><span class="paso-n">1</span>Casas a modificar</h2>
     <div class="toolbar">
-      <span class="contador" id="contadorSel">0 casas seleccionadas</span>
-      <button class="btn-secundario" id="btnTodas">Seleccionar / deseleccionar todas</button>
+      <span class="contador" id="contadorCasas">0 casas seleccionadas</span>
+      <button class="btn-secundario" id="btnTodasCasas">Seleccionar / deseleccionar todas</button>
     </div>
-    <div class="casas" id="listaCasas"><p class="vacio">Cargando…</p></div>
+    <div class="arbol" id="listaCasas"><p class="vacio">Cargando…</p></div>
+  </div>
 
-    <button class="btn-primary" id="btnAplicar" style="margin-top:18px" disabled>Aplicar avance</button>
+  <div class="card">
+    <h2><span class="paso-n">2</span>Categoría y destajos a marcar</h2>
+    <p class="hint-bloqueado" id="hintDestajos">Selecciona primero una o más casas en el Paso 1.</p>
+    <div class="toolbar">
+      <span class="contador" id="contadorDestajos">0 destajos seleccionados</span>
+      <button class="btn-secundario" id="btnTodasDestajos">Seleccionar / deseleccionar todos</button>
+    </div>
+    <div class="arbol" id="listaDestajos"><p class="vacio">Cargando…</p></div>
+  </div>
+
+  <div class="card">
+    <h2><span class="paso-n">3</span>Marcar como terminado</h2>
+    <button class="btn-primary" id="btnAplicar" disabled>Marcar como terminado</button>
     <div class="resultado" id="resultado"></div>
   </div>
 </div>
@@ -174,9 +174,11 @@ input[type=checkbox]{width:16px; height:16px; accent-color:var(--brass)}
 const HOST = window.chrome && window.chrome.webview ? window.chrome.webview : null;
 const el = id => document.getElementById(id);
 
-let partidas = [];
-let casas = [];        // { manzana, lote, prototipo, sel }
+let destajos = [];      // { categoria, destajo, nodoIdTunera, nodoIdCalandra, sel }
+let casas = [];         // { manzana, lote, prototipo, sel }
 let manzanasColapsadas = new Set();
+let categoriasColapsadas = new Set();
+let _estadoTimer = null;
 
 let _toastTimer = null;
 function toast(msg, tipo){
@@ -193,111 +195,169 @@ function alHost(accion, extra){
   HOST.postMessage(Object.assign({ accion }, extra || {}));
 }
 
-function renderPartidas(){
-  const sel = el('fPartida');
-  if (!partidas.length){ sel.innerHTML = '<option value="">Sin partidas disponibles</option>'; return; }
-  sel.innerHTML = partidas.map((p, i) => `<option value="${i}">${p.etiqueta}</option>`).join('');
-}
+// Árbol de dos niveles con checkbox tri-estado en el grupo: lo usan tanto
+// "Casas" (Manzana > Lote) como "Categoría y destajos" (Categoría > Destajo).
+// El orden de los grupos es el de primera aparición en `items`, NO alfabético:
+// para destajos eso es el orden real del árbol (igual que editor-tareas), y
+// para casas ya llegan pre-ordenadas por manzana/lote desde el host.
+function renderArbol(cont, items, colapsadas, opts){
+  if (!items.length){ cont.innerHTML = `<p class="vacio">${opts.vacioMsg}</p>`; opts.onChange(); return; }
 
-function actualizarContador(){
-  const n = casas.filter(c => c.sel).length;
-  el('contadorSel').textContent = `${n} casa(s) seleccionada(s)`;
-  el('btnAplicar').disabled = n === 0;
-}
+  const grupos = {};
+  const ordenGrupos = [];
+  items.forEach((it, i) => {
+    const k = opts.groupKey(it);
+    if (!grupos[k]) { grupos[k] = []; ordenGrupos.push(k); }
+    grupos[k].push(i);
+  });
 
-function renderCasas(){
-  const cont = el('listaCasas');
-  if (!casas.length){ cont.innerHTML = '<p class="vacio">No hay casas en el inventario.</p>'; actualizarContador(); return; }
-
-  const porManzana = {};
-  casas.forEach((c, i) => { (porManzana[c.manzana] = porManzana[c.manzana] || []).push(i); });
-
-  cont.innerHTML = Object.keys(porManzana).sort().map(m => {
-    const idxs = porManzana[m];
-    const todasSel = idxs.every(i => casas[i].sel);
-    const colapsada = manzanasColapsadas.has(m);
-    const filas = idxs.map(i => {
-      const c = casas[i];
-      return `
-        <div class="casa-fila">
-          <input type="checkbox" data-idx="${i}" class="chk-casa" ${c.sel ? 'checked' : ''}>
-          <span class="lote">Lote ${c.lote}</span>
-          <span class="proto">${c.prototipo || ''}</span>
-        </div>`;
-    }).join('');
+  cont.innerHTML = ordenGrupos.map(k => {
+    const idxs = grupos[k];
+    const todasSel = idxs.every(i => items[i].sel);
+    const colapsada = colapsadas.has(k);
+    const filas = idxs.map(i => `
+      <div class="item-fila">
+        <input type="checkbox" data-idx="${i}" class="chk-item" ${items[i].sel ? 'checked' : ''}>
+        ${opts.itemLabel(items[i])}
+      </div>`).join('');
     return `
-      <div class="manzana-grupo">
-        <div class="manzana-cab" data-m="${m}">
-          <input type="checkbox" class="chk-manzana" data-m="${m}" ${todasSel ? 'checked' : ''}>
-          <span>Manzana ${m} (${idxs.length})</span>
+      <div class="grupo">
+        <div class="grupo-cab" data-k="${k}">
+          <input type="checkbox" class="chk-grupo" data-k="${k}" ${todasSel ? 'checked' : ''}>
+          <span>${opts.groupLabel(k, idxs.length)}</span>
         </div>
-        <div class="manzana-filas" data-m="${m}" style="${colapsada ? 'display:none' : ''}">${filas}</div>
+        <div class="grupo-filas" data-k="${k}" style="${colapsada ? 'display:none' : ''}">${filas}</div>
       </div>`;
   }).join('');
 
-  cont.querySelectorAll('.chk-casa').forEach(chk => {
+  cont.querySelectorAll('.chk-item').forEach(chk => {
     chk.addEventListener('change', () => {
-      casas[Number(chk.dataset.idx)].sel = chk.checked;
-      actualizarContador();
-      // Sólo refleja el estado del check de manzana, sin redibujar todo (evita perder el scroll).
-      const grupo = chk.closest('.manzana-grupo');
-      const m = grupo.querySelector('.chk-manzana').dataset.m;
-      const idxs = casas.map((c, i) => c.manzana === m ? i : -1).filter(i => i >= 0);
-      grupo.querySelector('.chk-manzana').checked = idxs.every(i => casas[i].sel);
+      items[Number(chk.dataset.idx)].sel = chk.checked;
+      opts.onChange();
+      // Sólo refleja el estado del check del grupo, sin redibujar todo (evita perder el scroll).
+      const grupo = chk.closest('.grupo');
+      const k = grupo.querySelector('.chk-grupo').dataset.k;
+      const idxs = items.map((it, i) => opts.groupKey(it) === k ? i : -1).filter(i => i >= 0);
+      grupo.querySelector('.chk-grupo').checked = idxs.every(i => items[i].sel);
     });
   });
 
-  cont.querySelectorAll('.manzana-cab').forEach(cab => {
+  cont.querySelectorAll('.grupo-cab').forEach(cab => {
     cab.addEventListener('click', (ev) => {
-      if (ev.target.classList.contains('chk-manzana')) return;
-      const m = cab.dataset.m;
-      if (manzanasColapsadas.has(m)) manzanasColapsadas.delete(m); else manzanasColapsadas.add(m);
-      renderCasas();
+      if (ev.target.classList.contains('chk-grupo')) return;
+      const k = cab.dataset.k;
+      if (colapsadas.has(k)) colapsadas.delete(k); else colapsadas.add(k);
+      renderArbol(cont, items, colapsadas, opts);
     });
   });
 
-  cont.querySelectorAll('.chk-manzana').forEach(chk => {
+  cont.querySelectorAll('.chk-grupo').forEach(chk => {
     chk.addEventListener('click', (ev) => ev.stopPropagation());
     chk.addEventListener('change', () => {
-      const m = chk.dataset.m;
-      casas.forEach(c => { if (c.manzana === m) c.sel = chk.checked; });
-      renderCasas();
+      const k = chk.dataset.k;
+      items.forEach(it => { if (opts.groupKey(it) === k) it.sel = chk.checked; });
+      renderArbol(cont, items, colapsadas, opts);
     });
   });
 
-  actualizarContador();
+  opts.onChange();
 }
 
-el('btnTodas').addEventListener('click', () => {
+function renderCasas(){
+  renderArbol(el('listaCasas'), casas, manzanasColapsadas, {
+    groupKey: c => c.manzana,
+    groupLabel: (m, n) => `Manzana ${m} (${n})`,
+    itemLabel: c => `<span class="lote">Lote ${c.lote}</span><span class="proto">${c.prototipo || ''}</span>`,
+    vacioMsg: 'No hay casas en el inventario.',
+    onChange: () => { actualizarEstado(); solicitarEstadoDestajos(); }
+  });
+}
+
+function renderDestajos(){
+  renderArbol(el('listaDestajos'), destajos, categoriasColapsadas, {
+    groupKey: d => d.categoria,
+    groupLabel: (c, n) => `${c} (${n})`,
+    itemLabel: d => {
+      let badge = '';
+      if (d.casasTotal){
+        badge = d.casasCompletas === d.casasTotal
+          ? `<span class="badge-hecho">✓ Hecho</span>`
+          : d.casasCompletas > 0 ? `<span class="badge-parcial">${d.casasCompletas}/${d.casasTotal} casas</span>` : '';
+      }
+      return `<span>${d.destajo}</span>${badge}`;
+    },
+    vacioMsg: 'Sin destajos disponibles.',
+    onChange: actualizarEstado
+  });
+}
+
+// Para las casas seleccionadas en el Paso 1, pregunta al host qué destajos ya
+// están terminados (para marcarlos solos en el Paso 2). Debounced: si el
+// usuario marca varias casas seguidas, sólo se consulta una vez al terminar.
+function solicitarEstadoDestajos(){
+  clearTimeout(_estadoTimer);
+  const seleccionadasCasas = casas.filter(c => c.sel);
+  if (!seleccionadasCasas.length){
+    let cambio = false;
+    destajos.forEach(d => { if (d.casasTotal != null) { delete d.casasCompletas; delete d.casasTotal; cambio = true; } });
+    if (cambio) renderDestajos();
+    return;
+  }
+  _estadoTimer = setTimeout(() => {
+    alHost('consultar-estado', {
+      casas: seleccionadasCasas.map(c => ({ manzana: c.manzana, lote: c.lote, prototipo: c.prototipo }))
+    });
+  }, 300);
+}
+
+function actualizarEstado(){
+  const nCasas = casas.filter(c => c.sel).length;
+  const nDestajos = destajos.filter(d => d.sel).length;
+  el('contadorCasas').textContent = `${nCasas} casa(s) seleccionada(s)`;
+  el('contadorDestajos').textContent = `${nDestajos} destajo(s) seleccionado(s)`;
+
+  // Paso 2 depende del Paso 1: no tiene sentido elegir destajos sin saber a qué casas aplicarán.
+  el('listaDestajos').classList.toggle('deshabilitado', nCasas === 0);
+  el('btnTodasDestajos').disabled = nCasas === 0;
+  el('hintDestajos').textContent = nCasas === 0
+    ? 'Selecciona primero una o más casas en el Paso 1.'
+    : 'Los que ya dicen "✓ Hecho" están terminados en todas las casas elegidas (se marcan solos).';
+
+  el('btnAplicar').disabled = nCasas === 0 || nDestajos === 0;
+}
+
+el('btnTodasCasas').addEventListener('click', () => {
   const algunaSinSel = casas.some(c => !c.sel);
   casas.forEach(c => c.sel = algunaSinSel);
   renderCasas();
 });
 
+el('btnTodasDestajos').addEventListener('click', () => {
+  const algunaSinSel = destajos.some(d => !d.sel);
+  destajos.forEach(d => d.sel = algunaSinSel);
+  renderDestajos();
+});
+
 el('btnVolver').addEventListener('click', () => alHost('volver'));
 
 el('btnAplicar').addEventListener('click', () => {
-  const idx = el('fPartida').value;
-  if (idx === '' || !partidas[idx]){ toast('Selecciona una partida.', 'error'); return; }
-  const avance = parseFloat(el('fAvance').value);
-  if (isNaN(avance) || avance < 0 || avance > 100){ toast('El avance debe ser un número entre 0 y 100.', 'error'); return; }
+  const seleccionadasCasas = casas.filter(c => c.sel);
+  if (!seleccionadasCasas.length){ toast('Selecciona al menos una casa (manzana/lote).', 'error'); return; }
 
-  const seleccionadas = casas.filter(c => c.sel);
-  if (!seleccionadas.length){ toast('Selecciona al menos una casa.', 'error'); return; }
+  const seleccionadosDestajos = destajos.filter(d => d.sel);
+  if (!seleccionadosDestajos.length){ toast('Selecciona al menos un destajo.', 'error'); return; }
 
-  const p = partidas[idx];
-  const ok = confirm(`Se marcará "${p.etiqueta}" al ${avance}% en ${seleccionadas.length} casa(s).\n\nEsto sólo actualiza el avance de obra; no afecta destajos ni compras.\n\n¿Continuar?`);
+  const resumenDestajos = seleccionadosDestajos.length === 1
+    ? `"${seleccionadosDestajos[0].destajo}"`
+    : `${seleccionadosDestajos.length} destajos`;
+  const ok = confirm(`Se marcará ${resumenDestajos} como terminado en ${seleccionadasCasas.length} casa(s), con la cuadrilla genérica "ADMINISTRATIVO".\n\nSi alguno tiene destajos anteriores sin terminar en su categoría, también se finalizan para desbloquearlo.\n\n¿Continuar?`);
   if (!ok) return;
 
   el('btnAplicar').disabled = true;
   el('resultado').className = 'resultado';
   alHost('aplicar-avance', {
-    wbs: p.wbs,
-    padre: p.padre,
-    costoTunera: p.costoTunera,
-    costoCalandra: p.costoCalandra,
-    avance,
-    casas: seleccionadas.map(c => ({ manzana: c.manzana, lote: c.lote, prototipo: c.prototipo }))
+    destajos: seleccionadosDestajos.map(d => ({ nodoIdTunera: d.nodoIdTunera, nodoIdCalandra: d.nodoIdCalandra })),
+    casas: seleccionadasCasas.map(c => ({ manzana: c.manzana, lote: c.lote, prototipo: c.prototipo }))
   });
 });
 
@@ -307,19 +367,34 @@ if (HOST){
     if (!d || !d.tipo) return;
     switch (d.tipo){
       case 'datos':
-        partidas = d.partidas || [];
+        destajos = (d.destajos || []).map(x => Object.assign({ sel: false }, x));
         casas = (d.casas || []).map(c => Object.assign({ sel: false }, c));
-        renderPartidas();
         renderCasas();
+        renderDestajos();
+        break;
+      case 'estado':
+        {
+          const porKey = {};
+          (d.estados || []).forEach(e => { porKey[e.categoria + '||' + e.destajo] = e; });
+          destajos.forEach(item => {
+            const e = porKey[item.categoria + '||' + item.destajo];
+            if (!e || !e.casasTotal){ delete item.casasCompletas; delete item.casasTotal; return; }
+            item.casasCompletas = e.casasCompletas;
+            item.casasTotal = e.casasTotal;
+            if (e.casasCompletas === e.casasTotal) item.sel = true;
+          });
+          renderDestajos();
+        }
         break;
       case 'resultado':
         el('btnAplicar').disabled = false;
-        actualizarContador();
+        actualizarEstado();
+        solicitarEstadoDestajos(); // refleja los "✓ Hecho" nuevos sin tener que re-marcar casas
         const box = el('resultado');
         box.className = 'resultado ' + (d.errores && d.errores.length ? 'is-warn' : 'is-ok');
         box.textContent = (d.errores && d.errores.length)
-          ? `${d.ok} casa(s) actualizadas. ${d.errores.length} con error: ${d.errores.slice(0,5).join(' | ')}`
-          : `Listo: ${d.ok} casa(s) actualizadas.`;
+          ? `${d.ok} destajo(s) x casa terminados. ${d.errores.length} con error: ${d.errores.slice(0,5).join(' | ')}`
+          : `Listo: ${d.ok} destajo(s) x casa terminados.`;
         toast(d.errores && d.errores.length ? 'Se aplicó con algunos errores.' : 'Avance aplicado.', d.errores && d.errores.length ? 'error' : 'ok');
         break;
       case 'error':

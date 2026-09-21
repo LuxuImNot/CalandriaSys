@@ -175,14 +175,72 @@ namespace Calandria.Api.Controllers
                             Activados = activados,
                             ImporteTotal = importeTotal,
                             ImporteTerminado = importeTerminado,
-                            AvancePct = totalDestajos > 0 ? (int)Math.Round(finIds.Count * 100m / totalDestajos) : 0,
+                            // Ponderado por importe, igual que CalcularResumen (la
+                            // pantalla de destajos): así el mapa y el árbol dicen lo
+                            // mismo de la misma casa. Sin importes, conteo de destajos.
+                            AvancePct = importeTotal > 0
+                                ? (int)Math.Round(importeTerminado * 100m / importeTotal)
+                                : (totalDestajos > 0 ? (int)Math.Round(finIds.Count * 100m / totalDestajos) : 0),
                             Estado = estado,
                             UltimaActualizacion = ultima
                         });
                     }
                 }
+
+                // Respaldo: casas sin actividad de destajos pero con avance capturado a
+                // mano (FormHardProgress / AvanceManualObra) — sin esto se ven "idle" en
+                // el mapa aunque sí tengan progreso real registrado por esa vía.
+                if (ExisteTablaRuta(conn, "AvanceManualObra"))
+                {
+                    var manual = CargarAvanceManualPorCasa(conn);
+                    foreach (var r in resultado)
+                    {
+                        if (r.Estado != "idle") continue;
+                        if (!manual.TryGetValue((r.Manzana, r.Lote), out var m)) continue;
+
+                        r.AvancePct = m.AvancePct;
+                        r.Estado = m.AvancePct >= 100 ? "ok" : m.AvancePct > 0 ? "warn" : "idle";
+                        r.UltimaActualizacion = m.UltimaActualizacion;
+                    }
+                }
+
                 return Ok(resultado);
             }
+        }
+
+        private class AvanceManualResumen
+        {
+            public int AvancePct;
+            public DateTime? UltimaActualizacion;
+        }
+
+        /// <summary>
+        /// Avance manual (AvanceManualObra) agregado por casa, para el respaldo de
+        /// ResumenCasas. Promedio simple de AvancePorcentaje por WBS: ImporteTotal
+        /// casi nunca se captura en esta tabla (queda NULL), así que no sirve para
+        /// ponderar.
+        /// </summary>
+        private static Dictionary<(string, string), AvanceManualResumen> CargarAvanceManualPorCasa(SqlConnection conn)
+        {
+            var resultado = new Dictionary<(string, string), AvanceManualResumen>();
+            using (var cmd = new SqlCommand(@"
+                SELECT Manzana, Lote,
+                       AVG(ISNULL(AvancePorcentaje, 0)) AS Pct,
+                       MAX(FechaActualizacion) AS Ultima
+                FROM AvanceManualObra
+                GROUP BY Manzana, Lote", conn))
+            using (var reader = cmd.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    resultado[(reader["Manzana"].ToString(), reader["Lote"].ToString())] = new AvanceManualResumen
+                    {
+                        AvancePct = (int)Math.Round(Convert.ToDouble(reader["Pct"])),
+                        UltimaActualizacion = reader["Ultima"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(reader["Ultima"])
+                    };
+                }
+            }
+            return resultado;
         }
 
         /// <summary>GET /api/destajos/arbol?manzana=X&amp;lote=Y&amp;ruta=RutaTuneraDestajo|RutaCalandraDestajo</summary>
@@ -231,6 +289,100 @@ namespace Calandria.Api.Controllers
                     Nodos = nodos,
                     Resumen = resumen
                 });
+            }
+        }
+
+        /// <summary>
+        /// GET /api/destajos/catalogo-avance-masivo — destajos (Nivel 1) de ambas
+        /// rutas fusionados por Categoría+Nombre, para el treelist de Avance Masivo.
+        /// Igual criterio de "resolver por nombre entre prototipos" que ya usa el
+        /// catálogo de insumos de destajos para la OC. El orden es el mismo árbol
+        /// (Categoría, sus destajos en Orden, próxima categoría…) que ya usan
+        /// Arbol()/editor-tareas — CargarNodos ya lo entrega así (OrdenarComoArbol);
+        /// aquí sólo se conserva, nunca se reordena alfabéticamente.
+        /// </summary>
+        [HttpGet, Route("catalogo-avance-masivo")]
+        public IHttpActionResult CatalogoAvanceMasivo()
+        {
+            using (var conn = Db.Abrir())
+                return Ok(CargarCatalogoAvanceMasivo(conn));
+        }
+
+        /// <summary>Construye el catálogo fusionado de CatalogoAvanceMasivo(); factorizado para reusarse en EstadoAvanceMasivo.</summary>
+        private static List<CatalogoDestajoMasivoDto> CargarCatalogoAvanceMasivo(SqlConnection conn)
+        {
+            var merged = new Dictionary<string, CatalogoDestajoMasivoDto>(StringComparer.OrdinalIgnoreCase);
+            var orden = new List<string>();
+
+            void Agregar(string tablaRuta, bool esTunera)
+            {
+                var nodos = CargarNodos(conn, tablaRuta);
+                var categorias = nodos.Where(n => n.Nivel == 0).ToDictionary(n => n.Id, n => n.Nombre);
+                foreach (var n in nodos.Where(n => n.Nivel == 1))
+                {
+                    string categoria = categorias.TryGetValue(n.ParentId, out var cat) ? cat : "";
+                    string key = categoria.Trim() + "||" + n.Nombre.Trim();
+                    if (!merged.TryGetValue(key, out var dto))
+                    {
+                        dto = new CatalogoDestajoMasivoDto { Categoria = categoria, Destajo = n.Nombre };
+                        merged[key] = dto;
+                        orden.Add(key);
+                    }
+                    if (esTunera) dto.NodoIdTunera = n.Id; else dto.NodoIdCalandra = n.Id;
+                }
+            }
+            Agregar(TablaRutaTunera, true);
+            Agregar(TablaRutaCalandra, false);
+
+            return orden.Select(k => merged[k]).ToList();
+        }
+
+        /// <summary>
+        /// POST /api/destajos/estado-avance-masivo — para las casas dadas, cuántas ya
+        /// tienen cada destajo del catálogo finalizado. El treelist de Avance Masivo
+        /// usa esto para marcar (check) los destajos que ya están completos en TODAS
+        /// las casas seleccionadas y mostrar un badge cuando sólo están parciales.
+        /// </summary>
+        [HttpPost, Route("estado-avance-masivo")]
+        public IHttpActionResult EstadoAvanceMasivo([FromBody] List<AvanceMasivoCasaItem> casas)
+        {
+            if (casas == null || casas.Count == 0) return Ok(new List<EstadoDestajoMasivoDto>());
+
+            using (var conn = Db.Abrir())
+            {
+                EnsureTablaActivacion(conn);
+
+                var catalogo = CargarCatalogoAvanceMasivo(conn);
+                var resultado = catalogo.Select(d => new EstadoDestajoMasivoDto
+                {
+                    Categoria = d.Categoria,
+                    Destajo = d.Destajo,
+                    NodoIdTunera = d.NodoIdTunera,
+                    NodoIdCalandra = d.NodoIdCalandra,
+                    CasasTotal = casas.Count,
+                    CasasCompletas = 0
+                }).ToList();
+
+                foreach (var grupo in casas.GroupBy(c => RutaDeprototipo(c.Prototipo)))
+                {
+                    string tablaRuta = grupo.Key;
+                    var activacionesPorCasa = CargarActivacionesPorRuta(conn, tablaRuta);
+
+                    foreach (var c in grupo)
+                    {
+                        if (!activacionesPorCasa.TryGetValue((c.Manzana, c.Lote), out var activaciones)) continue;
+
+                        foreach (var d in resultado)
+                        {
+                            int? nodoId = tablaRuta == TablaRutaTunera ? d.NodoIdTunera : d.NodoIdCalandra;
+                            if (nodoId == null) continue;
+                            if (activaciones.TryGetValue(nodoId.Value, out var a) && a.Finalizado)
+                                d.CasasCompletas++;
+                        }
+                    }
+                }
+
+                return Ok(resultado);
             }
         }
 
@@ -878,6 +1030,125 @@ END";
                     }
                 });
             }
+        }
+
+        /// <summary>
+        /// Cuadrilla genérica con la que Avance Masivo activa/finaliza destajos en
+        /// bloque: no hay selector de cuadrilla real en ese formulario (decisión de
+        /// producto), así que estas activaciones quedan marcadas para reasignar la
+        /// cuadrilla real después en Destajos si hace falta para nómina.
+        /// </summary>
+        private const string CuadrillaAvanceMasivo = "ADMINISTRATIVO";
+
+        /// <summary>
+        /// POST /api/destajos/avance-masivo · finaliza uno o más destajos en varias
+        /// casas a la vez (usa la cuadrilla genérica <see cref="CuadrillaAvanceMasivo"/>).
+        /// Como un destajo sólo se puede finalizar si el anterior de su categoría ya
+        /// está terminado (ver EstaDesbloqueado/CalcularEstados), aquí se finaliza
+        /// también, en cascada, cualquier destajo previo pendiente de esa categoría
+        /// en esa casa — así el destajo pedido siempre queda desbloqueado.
+        /// </summary>
+        [HttpPost, Route("avance-masivo"), RequierePermiso("destajos.editar")]
+        public IHttpActionResult AvanceMasivo([FromBody] AvanceMasivoDestajosRequest req)
+        {
+            if (req?.Casas == null || req.Casas.Count == 0)
+                return BadRequest("No se recibieron casas a actualizar.");
+            if (req?.Destajos == null || req.Destajos.Count == 0)
+                return BadRequest("No se recibieron destajos a marcar.");
+
+            int ok = 0;
+            var errores = new List<string>();
+
+            using (var conn = Db.Abrir())
+            {
+                EnsureTablaActivacion(conn);
+
+                // Cadena de desbloqueo (Nivel 1 por categoría, en Orden) y nombres,
+                // una sola vez por ruta en vez de una vez por casa.
+                var cadenasPorRuta = new Dictionary<string, Dictionary<int, List<int>>>();
+                var nombresPorRuta = new Dictionary<string, Dictionary<int, string>>();
+                var padrePorRuta = new Dictionary<string, Dictionary<int, int>>();
+
+                void CargarRutaSiFalta(string tablaRuta)
+                {
+                    if (cadenasPorRuta.ContainsKey(tablaRuta)) return;
+                    var nivel1 = CargarNodos(conn, tablaRuta).Where(n => n.Nivel == 1).ToList();
+                    cadenasPorRuta[tablaRuta] = nivel1.GroupBy(n => n.ParentId)
+                        .ToDictionary(g => g.Key, g => g.Select(n => n.Id).ToList());
+                    nombresPorRuta[tablaRuta] = nivel1.ToDictionary(n => n.Id, n => n.Nombre);
+                    padrePorRuta[tablaRuta] = nivel1.ToDictionary(n => n.Id, n => n.ParentId);
+                }
+                CargarRutaSiFalta(TablaRutaTunera);
+                CargarRutaSiFalta(TablaRutaCalandra);
+
+                foreach (var c in req.Casas)
+                {
+                    string tablaRuta = RutaDeprototipo(c.Prototipo);
+                    var activaciones = CargarActivaciones(conn, c.Manzana, c.Lote, tablaRuta);
+                    var ahora = DateTime.Now;
+                    int okLocal = 0;
+                    var erroresLocal = new List<string>();
+
+                    using (var tx = conn.BeginTransaction())
+                    {
+                        try
+                        {
+                            foreach (var item in req.Destajos)
+                            {
+                                int? nodoIdN = tablaRuta == TablaRutaTunera ? item.NodoIdTunera : item.NodoIdCalandra;
+                                if (nodoIdN == null)
+                                {
+                                    erroresLocal.Add($"M{c.Manzana}-L{c.Lote}: ese destajo no existe en la ruta de esta casa.");
+                                    continue;
+                                }
+                                int nodoId = nodoIdN.Value;
+                                if (!padrePorRuta[tablaRuta].TryGetValue(nodoId, out int parentId))
+                                {
+                                    erroresLocal.Add($"M{c.Manzana}-L{c.Lote}: destajo no encontrado.");
+                                    continue;
+                                }
+
+                                var cadena = cadenasPorRuta[tablaRuta][parentId];
+                                int idx = cadena.IndexOf(nodoId);
+                                for (int i = 0; i <= idx; i++)
+                                {
+                                    int nid = cadena[i];
+                                    activaciones.TryGetValue(nid, out var act);
+                                    if (act != null && act.Finalizado) continue;
+
+                                    var refNodo = new DestajoRefRequest
+                                    {
+                                        Manzana = c.Manzana, Lote = c.Lote, Ruta = tablaRuta,
+                                        Prototipo = c.Prototipo, NodoId = nid
+                                    };
+                                    var fechaActivacion = act?.FechaActivacion ?? ahora;
+                                    PersistirActivacion(conn, tx, refNodo, nombresPorRuta[tablaRuta][nid],
+                                        activa: true, cuadrilla: CuadrillaAvanceMasivo, desatajoActivado: true,
+                                        finalizado: true, fechaActivacion: fechaActivacion, fechaFinalizacion: ahora);
+
+                                    activaciones[nid] = new ActivacionInfo
+                                    {
+                                        Activa = true, CuadrillaAsignada = CuadrillaAvanceMasivo,
+                                        DesatajoActivado = true, Finalizado = true,
+                                        FechaActivacion = fechaActivacion, FechaFinalizacion = ahora
+                                    };
+                                }
+                                okLocal++;
+                            }
+                            tx.Commit();
+                            ok += okLocal;
+                            errores.AddRange(erroresLocal);
+                        }
+                        catch (Exception ex)
+                        {
+                            tx.Rollback();
+                            errores.Add($"M{c.Manzana}-L{c.Lote}: {ex.Message}");
+                        }
+                    }
+                }
+            }
+
+            return Ok(new AvanceMasivoResultadoDto { Ok = ok, Errores = errores });
         }
 
         /// <summary>POST /api/destajos/desactivar · [ADMIN]</summary>

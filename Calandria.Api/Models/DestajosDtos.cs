@@ -198,6 +198,61 @@ namespace Calandria.Api.Models
         public NodoDestajoDto Nodo { get; set; }
     }
 
+    // ===================== Avance Masivo (FormAvanceMasivoWeb) =====================
+
+    /// <summary>
+    /// Un destajo (Nivel 1) fusionado por Categoría+Nombre entre RutaTuneraDestajo y
+    /// RutaCalandraDestajo, para el treelist de Avance Masivo. NodoId* queda null si
+    /// ese destajo no existe en esa ruta.
+    /// </summary>
+    public class CatalogoDestajoMasivoDto
+    {
+        public string Categoria { get; set; }
+        public string Destajo { get; set; }
+        public int? NodoIdTunera { get; set; }
+        public int? NodoIdCalandra { get; set; }
+    }
+
+    public class AvanceMasivoDestajoItem
+    {
+        public int? NodoIdTunera { get; set; }
+        public int? NodoIdCalandra { get; set; }
+    }
+
+    public class AvanceMasivoCasaItem
+    {
+        public string Manzana { get; set; }
+        public string Lote { get; set; }
+        public string Prototipo { get; set; }
+    }
+
+    /// <summary>POST /api/destajos/avance-masivo · marca varios destajos como terminados en varias casas.</summary>
+    public class AvanceMasivoDestajosRequest
+    {
+        public List<AvanceMasivoDestajoItem> Destajos { get; set; }
+        public List<AvanceMasivoCasaItem> Casas { get; set; }
+    }
+
+    public class AvanceMasivoResultadoDto
+    {
+        public int Ok { get; set; }
+        public List<string> Errores { get; set; } = new List<string>();
+    }
+
+    /// <summary>
+    /// Cuántas de las casas consultadas (POST /api/destajos/estado-avance-masivo) ya
+    /// tienen este destajo finalizado — para marcarlo en el treelist de Avance Masivo.
+    /// </summary>
+    public class EstadoDestajoMasivoDto
+    {
+        public string Categoria { get; set; }
+        public string Destajo { get; set; }
+        public int? NodoIdTunera { get; set; }
+        public int? NodoIdCalandra { get; set; }
+        public int CasasCompletas { get; set; }
+        public int CasasTotal { get; set; }
+    }
+
     /// <summary>
     /// Una fila de GET api/destajos/reporte-semana: un destajo (Nivel 1) activado,
     /// terminado o pendiente dentro del periodo. El cliente agrupa por Estado →

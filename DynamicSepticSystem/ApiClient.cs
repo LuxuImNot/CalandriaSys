@@ -26,7 +26,7 @@ namespace DynamicSepticSystem
         };
 
         public static string BaseUrl =>
-            (ConfigurationManager.AppSettings["ApiBaseUrl"] ?? "http://localhost:8734")
+            (ConfigurationManager.AppSettings["ApiBaseUrl"] ?? "http://localhost:8733")
             .TrimEnd('/');
 
         /// <summary>Token JWT de la sesión actual (vacío si no se ha autenticado por API).</summary>
@@ -745,6 +745,33 @@ namespace DynamicSepticSystem
         public int AvancePct { get; set; }
         public string Estado { get; set; }
         public DateTime? UltimaActualizacion { get; set; }
+    }
+
+    /// <summary>Un destajo fusionado entre rutas (api/destajos/catalogo-avance-masivo), para FormAvanceMasivoWeb.</summary>
+    public sealed class CatalogoDestajoMasivoApi
+    {
+        public string Categoria { get; set; }
+        public string Destajo { get; set; }
+        public int? NodoIdTunera { get; set; }
+        public int? NodoIdCalandra { get; set; }
+    }
+
+    /// <summary>Resultado de api/destajos/avance-masivo.</summary>
+    public sealed class AvanceMasivoResultadoApi
+    {
+        public int Ok { get; set; }
+        public List<string> Errores { get; set; } = new List<string>();
+    }
+
+    /// <summary>Estado de un destajo frente a un conjunto de casas (api/destajos/estado-avance-masivo).</summary>
+    public sealed class EstadoDestajoMasivoApi
+    {
+        public string Categoria { get; set; }
+        public string Destajo { get; set; }
+        public int? NodoIdTunera { get; set; }
+        public int? NodoIdCalandra { get; set; }
+        public int CasasCompletas { get; set; }
+        public int CasasTotal { get; set; }
     }
 
     public sealed class CuadrillaDestajoApi

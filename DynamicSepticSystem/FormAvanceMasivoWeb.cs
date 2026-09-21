@@ -1,8 +1,12 @@
-// Avance Masivo: marca UNA partida en VARIAS casas de un jalón. Hospeda
+// Avance Masivo: finaliza UNO O VARIOS destajos reales en VARIAS casas a la
+// vez, con la cuadrilla genérica "ADMINISTRATIVO" (decisión de producto: sin
+// selector de cuadrilla real en este formulario). Hospeda
 // Calandria.Api/ui/avance-masivo.html, mismo patrón que FormClientesWeb.cs.
-// Sólo llama a /api/avances/jerarquico, /api/destajos/resumen-casas (lectura)
-// y /api/avances/partida (el mismo upsert que ya usa FormHardProgress) —
-// nunca toca ActivacionTareasRuta ni ninguna tabla de Destajos/Compras.
+// Llama a /api/destajos/catalogo-avance-masivo, /api/destajos/resumen-casas y
+// /api/destajos/estado-avance-masivo (lectura) y /api/destajos/avance-masivo
+// (activa+finaliza en cascada sobre ActivacionTareasRuta) — así el % que se ve
+// en el mapa del panel principal (resumen-casas.AvancePct, calculado de
+// destajos finalizados) sí se mueve.
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -181,15 +185,13 @@ namespace DynamicSepticSystem
 
         private class MsgAccion { public string accion; }
         private class MsgCasaJs { public string manzana; public string lote; public string prototipo; }
+        private class MsgDestajoJs { public int? nodoIdTunera; public int? nodoIdCalandra; }
         private class MsgAplicarAvance
         {
-            public int wbs;
-            public string padre;
-            public double costoTunera;
-            public double costoCalandra;
-            public double avance;
+            public List<MsgDestajoJs> destajos;
             public List<MsgCasaJs> casas;
         }
+        private class MsgConsultarEstado { public List<MsgCasaJs> casas; }
 
         private void WebAvance_Mensaje(object sender, CoreWebView2WebMessageReceivedEventArgs e)
         {
@@ -213,6 +215,9 @@ namespace DynamicSepticSystem
                     case "aplicar-avance":
                         { var d = JsonConvert.DeserializeObject<MsgAplicarAvance>(json); AplicarAvanceWeb(d); }
                         break;
+                    case "consultar-estado":
+                        { var d = JsonConvert.DeserializeObject<MsgConsultarEstado>(json); ConsultarEstadoWeb(d); }
+                        break;
                     case "volver":
                         Close();
                         break;
@@ -231,23 +236,16 @@ namespace DynamicSepticSystem
         {
             try
             {
-                // Catálogo de partidas con el costo de ambos prototipos: el WBS es
-                // estable entre llamadas porque el ORDER BY de /api/avances/jerarquico
-                // no depende del prototipo (ver AvancesController.Jerarquico).
-                var conCalandra = ApiClient.Get<JerarquicoAvanceApi>("/api/avances/jerarquico?manzana=&lote=&prototipo=CALANDRA");
-                var conTunera = ApiClient.Get<JerarquicoAvanceApi>("/api/avances/jerarquico?manzana=&lote=&prototipo=TUNERA");
-                var costoTuneraPorWbs = (conTunera?.Partidas ?? new List<PartidaAvanceApi>()).ToDictionary(p => p.Wbs, p => p.ImporteTotal);
-
-                var partidas = (conCalandra?.Partidas ?? new List<PartidaAvanceApi>())
-                    .Select(p => new
+                var catalogo = ApiClient.Get<List<CatalogoDestajoMasivoApi>>("/api/destajos/catalogo-avance-masivo")
+                    ?? new List<CatalogoDestajoMasivoApi>();
+                var destajos = catalogo
+                    .Select(d => new
                     {
-                        wbs = p.Wbs,
-                        etiqueta = $"{p.Etapa} > {p.Partida}",
-                        padre = p.Padre,
-                        costoCalandra = p.ImporteTotal,
-                        costoTunera = costoTuneraPorWbs.TryGetValue(p.Wbs, out var ct) ? ct : p.ImporteTotal
+                        categoria = d.Categoria,
+                        destajo = d.Destajo,
+                        nodoIdTunera = d.NodoIdTunera,
+                        nodoIdCalandra = d.NodoIdCalandra
                     })
-                    .OrderBy(p => p.etiqueta)
                     .ToList();
 
                 // Mismo listado de sólo lectura que usa el mapa del panel principal.
@@ -257,7 +255,7 @@ namespace DynamicSepticSystem
                     .Select(c => new { manzana = c.Manzana, lote = c.Lote, prototipo = c.Prototipo })
                     .ToList();
 
-                Push(new { tipo = "datos", partidas, casas });
+                Push(new { tipo = "datos", destajos, casas });
             }
             catch (Exception ex)
             {
@@ -272,41 +270,55 @@ namespace DynamicSepticSystem
                 PushError("No se recibieron casas a actualizar.");
                 return;
             }
-
-            int ok = 0;
-            var errores = new List<string>();
-
-            foreach (var c in d.casas)
+            if (d?.destajos == null || d.destajos.Count == 0)
             {
-                try
-                {
-                    bool esTunera = (c.prototipo ?? "").ToUpperInvariant().Contains("TUNERA");
-                    double costo = esTunera ? d.costoTunera : d.costoCalandra;
-                    double ejecutado = costo * (d.avance / 100.0);
-
-                    // Mismo endpoint que GuardarAvancePartidaEnBD en FormHardProgress.
-                    ApiClient.Post("/api/avances/partida", new
-                    {
-                        Manzana = c.manzana,
-                        Lote = c.lote,
-                        Prototipo = c.prototipo,
-                        Wbs = d.wbs,
-                        AvancePorcentaje = d.avance,
-                        Concepto = d.padre ?? "",
-                        ImporteTotal = costo,
-                        ImporteEjecutado = ejecutado
-                    });
-                    ok++;
-                }
-                catch (Exception ex)
-                {
-                    var apiEx = ex as ApiException;
-                    string msg = apiEx != null ? MensajeDe(apiEx) : ex.Message;
-                    errores.Add($"M{c.manzana}-L{c.lote}: {msg}");
-                }
+                PushError("No se recibieron destajos a marcar.");
+                return;
             }
 
-            Push(new { tipo = "resultado", ok, errores });
+            try
+            {
+                var resultado = ApiClient.Post<AvanceMasivoResultadoApi>("/api/destajos/avance-masivo", new
+                {
+                    Destajos = d.destajos.Select(x => new { NodoIdTunera = x.nodoIdTunera, NodoIdCalandra = x.nodoIdCalandra }),
+                    Casas = d.casas.Select(c => new { Manzana = c.manzana, Lote = c.lote, Prototipo = c.prototipo })
+                });
+
+                Push(new { tipo = "resultado", ok = resultado?.Ok ?? 0, errores = resultado?.Errores ?? new List<string>() });
+            }
+            catch (Exception ex)
+            {
+                ManejarErrorApi(ex, "No se pudo aplicar el avance");
+            }
+        }
+
+        /// <summary>
+        /// Para las casas seleccionadas en el Paso 1, consulta cuántas ya tienen cada
+        /// destajo finalizado, para marcarlo en el treelist. No crítico: si falla, se
+        /// registra pero no se molesta al usuario con un toast (el treelist sólo se
+        /// queda sin la marca de "ya hecho").
+        /// </summary>
+        private void ConsultarEstadoWeb(MsgConsultarEstado d)
+        {
+            if (d?.casas == null || d.casas.Count == 0)
+            {
+                Push(new { tipo = "estado", estados = new List<EstadoDestajoMasivoApi>() });
+                return;
+            }
+
+            try
+            {
+                var estados = ApiClient.Post<List<EstadoDestajoMasivoApi>>("/api/destajos/estado-avance-masivo",
+                    d.casas.Select(c => new { Manzana = c.manzana, Lote = c.lote, Prototipo = c.prototipo }));
+
+                Push(new { tipo = "estado", estados = estados ?? new List<EstadoDestajoMasivoApi>() });
+            }
+            catch (Exception ex)
+            {
+                var apiEx = ex as ApiException;
+                string msg = apiEx != null ? MensajeDe(apiEx) : ex.Message;
+                ErrorLogger.RegistrarMensaje("AvanceMasivoWeb", "No se pudo consultar el estado de destajos: " + msg);
+            }
         }
     }
 }

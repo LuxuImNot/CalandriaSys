@@ -13,7 +13,7 @@ using Calandria.Api.Models;
 namespace Calandria.Api.Controllers
 {
     /// <summary>
-    /// Facturación del add-on "Conciliación de factura con IA" a Pilaris: saldo
+    /// Facturación del add-on "Conciliación de factura con IA" a CalandriaSys: saldo
     /// por obra (todas las obras activas de esta instalación — cada una tiene su
     /// propia BD, ConciliacionesIaLog vive ahí, no en la BD maestra), historial de
     /// facturas conciliadas por obra, y repositorio de PDFs de resumen generados
