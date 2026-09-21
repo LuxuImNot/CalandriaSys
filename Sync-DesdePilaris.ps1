@@ -74,6 +74,11 @@ foreach ($c in $carpetas) {
 
         if ($rel -match $textos) {
             $nuevo = Rebrand ([IO.File]::ReadAllText($f.FullName))
+            # Los dos repos son PUBLICOS: no dejar que un secreto de Pilaris
+            # viaje hasta aca de contrabando. Aborta en vez de avisar y seguir.
+            if ($nuevo -match 'gh[pousr]_[A-Za-z0-9]{30,}|github_pat_[A-Za-z0-9_]{50,}') {
+                Write-Error "$rel trae un token de GitHub. Limpialo en Pilaris antes de sincronizar."
+            }
             if ($existe -and [IO.File]::ReadAllText($dst) -eq $nuevo) { continue }
             if ($Aplicar) {
                 New-Item -ItemType Directory -Force (Split-Path $dst) | Out-Null

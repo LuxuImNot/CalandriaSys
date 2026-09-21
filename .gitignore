@@ -25,3 +25,7 @@ packages/
 secrets.config
 connectionStrings.config
 connectionStrings.release.config
+
+# ---- Artefactos de release: viven en la pagina de Releases, no en el repo. ----
+*.zip
+*.zip.sha256
