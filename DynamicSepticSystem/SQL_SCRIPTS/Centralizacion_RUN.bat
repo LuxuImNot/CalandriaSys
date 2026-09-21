@@ -18,7 +18,7 @@ REM ---- Conexion (tomada de App.config; editar si cambia el entorno) ----
 set "SERVER=100.75.234.9"
 set "DB=CALANDRIA"
 set "DBUSER=sa"
-set "DBPASS=CalandriaConnections2026"
+set "DBPASS=<CONTRASENA-PURGADA>"
 
 REM ---- Override opcional por argumentos ----
 if not "%~1"=="" set "SERVER=%~1"

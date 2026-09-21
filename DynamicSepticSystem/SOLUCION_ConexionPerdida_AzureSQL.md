@@ -46,7 +46,7 @@ La aplicación no puede conectarse a Azure SQL Database (servidor `calandria-sqls
 **Solución:**
 1. Verifica en `App.config`:
    ```xml
-   User ID=TU_USUARIO;Password=TU_CONTRASENA
+   User ID=CloudSA9f45f232;Password=<CONTRASENA-PURGADA>
    ```
 2. Si la contraseña ha cambiado:
    - Ve a Azure Portal ? SQL Server ? Settings ? **Reset password**
@@ -124,7 +124,7 @@ La aplicación no puede conectarse a Azure SQL Database (servidor `calandria-sqls
 
 ### Error 18456: Login failed
 ```
-? Login failed for user 'TU_USUARIO'
+? Login failed for user 'CloudSA9f45f232'
 ```
 **Solución:** Verifica usuario/contraseña (Causa #3)
 

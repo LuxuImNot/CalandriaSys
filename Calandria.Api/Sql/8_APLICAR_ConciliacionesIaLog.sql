@@ -3,7 +3,7 @@
 -- viene incluida en ObraPlantilla.sql). Registra, deduplicado por Uuid, cada
 -- factura conciliada con el emparejador automático (IA) en
 -- /api/ordenescompra/conciliar-factura — sirve para facturar el add-on
--- "Conciliación de factura con IA" a Pilaris ($18 MXN/factura, mínimo
+-- "Conciliación de factura con IA" a CalandriaSys ($18 MXN/factura, mínimo
 -- $500 MXN/mes por obra).
 --
 -- Solo agrega una tabla nueva; no toca ninguna tabla ni fila existente.

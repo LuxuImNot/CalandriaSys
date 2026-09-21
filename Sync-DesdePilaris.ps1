@@ -51,12 +51,26 @@ $textos = '\.(cs|html|js|css|config|csproj|resx|sln|md|sql|json|xml|txt)$'
 
 # Intercambio SIMULTANEO de marca: asi un comentario de Pilaris que menciona a
 # CalandriaSys como "el otro producto" queda bien orientado de este lado.
-function Rebrand([string]$t) {
+#
+# Trabaja sobre BYTES, no sobre texto. En el repo conviven archivos UTF-8 y
+# ISO-8859-1 (~100 de estos ultimos): decodificarlos como UTF-8 convierte cada
+# acento en U+FFFD y eso ya rompio una compilacion, porque la "n" de TamanioKB
+# vivia dentro de un identificador. Latin-1 mapea cada byte a un caracter y de
+# vuelta sin perder nada, asi que las secuencias UTF-8 pasan intactas y solo se
+# tocan los tokens de marca, que son ASCII puro.
+$LATIN1 = [Text.Encoding]::GetEncoding(28591)
+
+function RebrandBytes([byte[]]$bytes) {
+    # Hay archivos de 0 bytes en el repo (licenses.licx, UpdateServer.cs...) y
+    # PowerShell convierte el arreglo vacio en $null al enlazar el parametro.
+    if ($null -eq $bytes -or $bytes.Length -eq 0) { return ,([byte[]]@()) }
+    $t = $LATIN1.GetString($bytes)
     $t = [regex]::Replace($t, 'Pilaris|CalandriaSys', {
         param($m) if ($m.Value -eq 'Pilaris') { 'CalandriaSys' } else { 'Pilaris' } })
     # Los dos repos venian con finales de linea distintos (CRLF alla, LF aqui):
     # normalizar a CRLF evita que cada sync marque como "modificado" medio repo.
-    [regex]::Replace($t, "\r?\n", "`r`n")
+    $t = [regex]::Replace($t, "\r?\n", "`r`n")
+    ,$LATIN1.GetBytes($t)
 }
 
 $cambiados = @(); $nuevos = @()
@@ -73,16 +87,16 @@ foreach ($c in $carpetas) {
         $existe = Test-Path $dst
 
         if ($rel -match $textos) {
-            $nuevo = Rebrand ([IO.File]::ReadAllText($f.FullName))
+            $nuevo = RebrandBytes ([IO.File]::ReadAllBytes($f.FullName))
             # Los dos repos son PUBLICOS: no dejar que un secreto de Pilaris
             # viaje hasta aca de contrabando. Aborta en vez de avisar y seguir.
-            if ($nuevo -match 'gh[pousr]_[A-Za-z0-9]{30,}|github_pat_[A-Za-z0-9_]{50,}') {
+            if ($nuevo.Length -gt 0 -and $LATIN1.GetString($nuevo) -match 'gh[pousr]_[A-Za-z0-9]{30,}|github_pat_[A-Za-z0-9_]{50,}') {
                 Write-Error "$rel trae un token de GitHub. Limpialo en Pilaris antes de sincronizar."
             }
-            if ($existe -and [IO.File]::ReadAllText($dst) -eq $nuevo) { continue }
+            if ($existe -and @(Compare-Object $nuevo ([IO.File]::ReadAllBytes($dst)) -SyncWindow 0).Count -eq 0) { continue }
             if ($Aplicar) {
                 New-Item -ItemType Directory -Force (Split-Path $dst) | Out-Null
-                [IO.File]::WriteAllText($dst, $nuevo)
+                [IO.File]::WriteAllBytes($dst, $nuevo)
             }
         } else {
             if ($existe -and (Get-FileHash $f.FullName).Hash -eq (Get-FileHash $dst).Hash) { continue }

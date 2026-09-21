@@ -9,7 +9,7 @@ Write-Host ""
 # Variables de configuración
 $serverName = "calandria-sqlserver.database.windows.net"
 $databaseName = "CALANDRIA"
-$userId = "TU_USUARIO"
+$userId = "CloudSA9f45f232"
 $timeout = 30
 
 Write-Host "?? Configuración:" -ForegroundColor Yellow

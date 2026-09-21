@@ -2530,7 +2530,7 @@ GO
 /****** Object:  Table [dbo].[ConciliacionesIaLog]
     Registro (deduplicado por Uuid) de facturas conciliadas con el emparejador
     automático (IA) en /api/ordenescompra/conciliar-factura — base para
-    facturar el add-on "Conciliación de factura con IA" a Pilaris. ******/
+    facturar el add-on "Conciliación de factura con IA" a CalandriaSys. ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON

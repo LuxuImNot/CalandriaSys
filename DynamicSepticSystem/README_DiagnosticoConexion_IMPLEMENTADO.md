@@ -118,7 +118,7 @@ Intentando conectar a Azure SQL Database...
 
 Información del servidor:
   • Base de datos: CALANDRIA
-  • Usuario conectado: TU_USUARIO
+  • Usuario conectado: CloudSA9f45f232
   • Tablas en BD: 42
 
 ?????????????????????????????????????????????????????
@@ -127,7 +127,7 @@ Información del servidor:
 Servidor:
   • Data Source: tcp:calandria-sqlserver.database.windows.net,1433
   • Initial Catalog: CALANDRIA
-  • User ID: TU_USUARIO
+  • User ID: CloudSA9f45f232
   • Encrypt: True
   • Trust Server Certificate: False
   • Connection Timeout: 30s

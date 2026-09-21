@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Configuration;
 using System.Diagnostics;
 using System.IO;
@@ -91,9 +91,10 @@ namespace DynamicSepticSystem
         {
             var owner = ConfigurationManager.AppSettings["GitHubOwner"] ?? "LuxuImNot";
             var repo = ConfigurationManager.AppSettings["GitHubRepo"] ?? "CalandriaApp";
+
             // Sin repo configurado no hay canal de actualizacion: se corta aqui (el
             // unico punto donde se lee) en vez de pegarle a una URL invalida. Si esto
-            // faltara, CalandriaSys terminaria bajando la release de OTRO producto
+            // faltara, el cliente podria terminar bajando la release de OTRO producto
             // (Pilaris) y sobrescribiendose con ella al cerrar la app.
             if (string.IsNullOrWhiteSpace(owner) || string.IsNullOrWhiteSpace(repo))
             {
