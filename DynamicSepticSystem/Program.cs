@@ -21,6 +21,11 @@ namespace DynamicSepticSystem
         [STAThread]
         static void Main()
         {
+            // Pantallas negras/crashes de WebView2 en equipos con GPU/drivers flojos:
+            // render por software. Debe ir antes de crear cualquier entorno WebView2.
+            if (Environment.GetEnvironmentVariable("WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS") == null)
+                Environment.SetEnvironmentVariable("WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS", "--disable-gpu");
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             ErrorLogger.Inicializar();

@@ -31,6 +31,8 @@ namespace DynamicSepticSystem
         private WebView2 webLogin;
         private Actualizador.ResultadoChequeo _ultimoChequeoActualizacion;
         private FormActualizacionWeb _formActualizacion;
+        // Se comparte con la ventana de actualización: un 2º entorno = otro árbol de procesos de Edge.
+        private CoreWebView2Environment _entorno;
 
         private static readonly JsonSerializerSettings CamelCaseSettings =
             new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() };
@@ -69,8 +71,8 @@ namespace DynamicSepticSystem
                 string userDataFolder = Path.Combine(
                     Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                     "Calandria", "WebView2Login");
-                var entorno = await CoreWebView2Environment.CreateAsync(null, userDataFolder, null);
-                await webLogin.EnsureCoreWebView2Async(entorno);
+                _entorno = await CoreWebView2Environment.CreateAsync(null, userDataFolder, null);
+                await webLogin.EnsureCoreWebView2Async(_entorno);
             }
             catch (Exception ex)
             {
@@ -344,7 +346,7 @@ namespace DynamicSepticSystem
             }
 
             Enabled = false;
-            _formActualizacion = new FormActualizacionWeb(r.VersionLocal, r.VersionRemota, r.ZipUrl);
+            _formActualizacion = new FormActualizacionWeb(r.VersionLocal, r.VersionRemota, r.ZipUrl, _entorno);
             _formActualizacion.Show();
         }
     }

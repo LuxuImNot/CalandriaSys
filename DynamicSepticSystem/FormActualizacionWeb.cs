@@ -42,8 +42,11 @@ namespace DynamicSepticSystem
 
         private static string CacheHtml => Path.Combine(CacheDir, "actualizacion.html");
 
-        public FormActualizacionWeb(string versionLocal, string versionRemota, string zipUrl)
+        private CoreWebView2Environment _entorno;
+
+        public FormActualizacionWeb(string versionLocal, string versionRemota, string zipUrl, CoreWebView2Environment entorno = null)
         {
+            _entorno = entorno;
             _versionLocal = versionLocal;
             _versionRemota = versionRemota;
             _zipUrl = zipUrl;
@@ -85,11 +88,14 @@ namespace DynamicSepticSystem
         {
             try
             {
-                string userDataFolder = Path.Combine(
-                    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                    "Calandria", "WebView2Actualizacion");
-                var entorno = await CoreWebView2Environment.CreateAsync(null, userDataFolder, null);
-                await webActualizacion.EnsureCoreWebView2Async(entorno);
+                if (_entorno == null)
+                {
+                    string userDataFolder = Path.Combine(
+                        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                        "Calandria", "WebView2Actualizacion");
+                    _entorno = await CoreWebView2Environment.CreateAsync(null, userDataFolder, null);
+                }
+                await webActualizacion.EnsureCoreWebView2Async(_entorno);
             }
             catch (Exception ex)
             {
