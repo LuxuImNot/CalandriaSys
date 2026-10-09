@@ -515,6 +515,7 @@ table.grid td.actions .btn{padding:5px 10px; font-size:11px; margin-left:4px}
 table.grid th.sel, table.grid td.sel{width:34px; padding-left:14px; padding-right:0}
 table.grid td.sel input{width:14px; height:14px; accent-color:var(--brass); cursor:pointer}
 table.grid tr.is-off td:not(.sel){opacity:.42}
+.rgroup.is-off > .rgroup-body{opacity:.42}
 </style>
 </head>
 <body>
@@ -789,6 +790,8 @@ table.grid tr.is-off td:not(.sel){opacity:.42}
         </div>
         <div class="tb-spacer"></div>
         <div class="rfield"><label class="eyebrow" for="rExpBuscar">Buscar</label><input type="search" id="rExpBuscar" placeholder="Destajo, categoría, insumo, clave…"></div>
+        <button class="btn" id="rExpTodos">Marcar todo</button>
+        <button class="btn" id="rExpNinguno">Desmarcar todo</button>
         <button class="btn btn-primary" id="rExpExcel">Exportar Excel</button>
       </div>
       <section class="kpis" aria-label="Resumen de la casa">
@@ -964,7 +967,7 @@ table.grid tr.is-off td:not(.sel){opacity:.42}
       else if (d.tipo === "reporte-cuadrilla") renderReporteCuadrilla(d.lista || []);
       else if (d.tipo === "reporte-nomina") renderReporteNomina(d.lista || []);
       else if (d.tipo === "reporte-recibos") renderReporteRecibos(d.lista || []);
-      else if (d.tipo === "reporte-casa-destajos") { rCasaLista = d.lista || []; rPreSel = new Set(rCasaLista.map(x => x.id)); renderExplosion(); renderPrecios(); }
+      else if (d.tipo === "reporte-casa-destajos") { rCasaLista = d.lista || []; rPreSel = new Set(rCasaLista.map(x => x.id)); rExpSel = new Set(rPreSel); renderExplosion(); renderPrecios(); }
       else if (d.tipo === "datos") {
         aplicarPermisos(d.esAdmin, d.puedeEditar);
         if (d.usuario) {
@@ -1360,6 +1363,7 @@ table.grid tr.is-off td:not(.sel){opacity:.42}
   const rPreGroups = document.getElementById("rPreGroups"), rPreExcel = document.getElementById("rPreExcel");
   let rCasaLista = [];
   let rPreSel = new Set();        // ids de destajo marcados para exportar
+  let rExpSel = new Set();        // ídem, en la pestaña de explosión
   let rPreCerradas = new Set();   // categorías que el usuario plegó (sobrevive al repintado)
 
   const CLASE_ESTADO_CASA = { Finalizado: "b-ok", Activado: "b-warn", Pendiente: "b-idle" };
@@ -1369,8 +1373,28 @@ table.grid tr.is-off td:not(.sel){opacity:.42}
   rExpEstado.addEventListener("change", renderExplosion);
   rExpBuscar.addEventListener("input", renderExplosion);
   rPreBuscar.addEventListener("input", renderPrecios);
-  document.getElementById("rExpExcel").addEventListener("click", () =>
-    alHostReporte("reporte-casa-excel", { formato: "explosion" }));
+  const rExpExcel = document.getElementById("rExpExcel");
+  const visiblesExp = () => filtrarCasa((rExpBuscar.value || "").trim().toLowerCase(), rExpEstado.value)
+    .filter(d => (d.insumos || []).length);
+  const marcadosExp = () => visiblesExp().filter(d => rExpSel.has(d.id));
+  function actualizarExpExcel() {
+    const n = marcadosExp().length;
+    rExpExcel.textContent = "Exportar Excel (" + n + ")";
+    rExpExcel.disabled = n === 0;
+  }
+  rExpExcel.addEventListener("click", () =>
+    alHostReporte("reporte-casa-excel", { formato: "explosion", ids: marcadosExp().map(d => d.id) }));
+  document.getElementById("rExpTodos").addEventListener("click", () => { visiblesExp().forEach(d => rExpSel.add(d.id)); renderExplosion(); });
+  document.getElementById("rExpNinguno").addEventListener("click", () => { visiblesExp().forEach(d => rExpSel.delete(d.id)); renderExplosion(); });
+  // Sin repintar: así los destajos que el usuario plegó siguen plegados.
+  rExpGroups.addEventListener("change", ev => {
+    const chk = ev.target.closest("input[data-exp]");
+    if (!chk) return;
+    const id = +chk.dataset.exp;
+    if (chk.checked) rExpSel.add(id); else rExpSel.delete(id);
+    chk.closest("details").classList.toggle("is-off", !chk.checked);
+    actualizarExpExcel();
+  });
   rPreExcel.addEventListener("click", () =>
     alHostReporte("reporte-casa-excel", { formato: "precios", ids: Array.from(rPreSel) }));
 
@@ -1431,6 +1455,7 @@ table.grid tr.is-off td:not(.sel){opacity:.42}
   function renderExplosion() {
     const termino = (rExpBuscar.value || "").trim().toLowerCase();
     const lista = filtrarCasa(termino, rExpEstado.value).filter(d => (d.insumos || []).length);
+    actualizarExpExcel();
 
     const claves = new Set();
     let importe = 0;
@@ -1452,8 +1477,9 @@ table.grid tr.is-off td:not(.sel){opacity:.42}
           <div class="num">${mx(i.precioUnitario)}</div>
           <div class="num">${mx(i.importe)}</div>
         </div>`).join("");
-      return `<details class="rgroup ${CLASE_ESTADO_CASA[d.estado] || "b-idle"}" open>
-        <summary>${esc(d.categoria)} · ${esc(d.destajo)} <span class="rcount">(${d.insumos.length})</span>${chevSvg}</summary>
+      const on = rExpSel.has(d.id);
+      return `<details class="rgroup ${CLASE_ESTADO_CASA[d.estado] || "b-idle"}${on ? "" : " is-off"}" open>
+        <summary><input type="checkbox" data-exp="${d.id}"${on ? " checked" : ""} aria-label="Incluir ${esc(d.destajo)}">${esc(d.categoria)} · ${esc(d.destajo)} <span class="rcount">(${d.insumos.length})</span>${chevSvg}</summary>
         <div class="rgroup-body">${filas}
           <div class="ritem"><div class="ritem-name">Subtotal material${d.cuadrilla ? " · " + esc(d.cuadrilla) : ""}</div>
             <div></div><div></div><div class="num"><strong>${mx(d.material)}</strong></div></div>
