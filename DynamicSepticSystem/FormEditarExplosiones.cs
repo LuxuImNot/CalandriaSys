@@ -1,3 +1,4 @@
+using ClosedXML.Excel;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -16,6 +17,7 @@ namespace DynamicSepticSystem
         private Button btnGuardar;
         private Button btnAgregar;
         private Button btnEliminar;
+        private Button btnExportar;
         private TextBox txtClave;
         private TextBox txtDescripcion;
         private TextBox txtUnidad;
@@ -73,7 +75,10 @@ namespace DynamicSepticSystem
             btnGuardar = new Button { Left = 10, Top = 500, Width = 120, Text = "Guardar Cambios" };
             btnGuardar.Click += BtnGuardar_Click;
 
-            lblStatus = new Label { Left = 140, Top = 504, Width = 600, ForeColor = Color.DarkGreen };
+            btnExportar = new Button { Left = 140, Top = 500, Width = 120, Text = "Exportar Excel" };
+            btnExportar.Click += BtnExportar_Click;
+
+            lblStatus = new Label { Left = 270, Top = 504, Width = 460, ForeColor = Color.DarkGreen };
 
             this.Controls.Add(cmbPrototipos);
             this.Controls.Add(btnCargar);
@@ -91,6 +96,7 @@ namespace DynamicSepticSystem
             this.Controls.Add(btnAgregar);
             this.Controls.Add(btnEliminar);
             this.Controls.Add(btnGuardar);
+            this.Controls.Add(btnExportar);
             this.Controls.Add(lblStatus);
 
             LoadPrototipos();
@@ -158,6 +164,62 @@ namespace DynamicSepticSystem
             catch (Exception ex)
             {
                 MessageBox.Show("Error cargando explosiones: " + ex.Message);
+            }
+        }
+
+        /// <summary>Exporta la explosion del prototipo seleccionado (formato Explosion Insumos TUNERA v3).</summary>
+        private void BtnExportar_Click(object sender, EventArgs e)
+        {
+            if (cmbPrototipos.SelectedItem == null) { MessageBox.Show("Selecciona un prototipo."); return; }
+            string prot = cmbPrototipos.SelectedItem.ToString();
+            string tabla = GetExplosionTableForPrototipo(prot);
+
+            using (var dlg = new SaveFileDialog { Filter = "Excel (*.xlsx)|*.xlsx", FileName = $"ExplosionInsumos_{prot}.xlsx" })
+            {
+                if (dlg.ShowDialog(this) != DialogResult.OK) return;
+                try
+                {
+                    using (var libro = new XLWorkbook())
+                    using (var conn = new SqlConnection(connectionString))
+                    {
+                        var ws = libro.Worksheets.Add("Explosion");
+                        ws.Range("A1:F1").Merge().Value = $"EXPLOSION DE INSUMOS - {prot}";
+                        ws.Range("A1:F1").Style.Font.SetBold().Font.SetFontSize(14).Font.SetFontColor(XLColor.White).Fill.SetBackgroundColor(XLColor.FromArgb(0xB3, 0x6C, 0x2E));
+                        string[] enc = { "Clave", "Insumo", "Unidad", "Cantidad", "P.U.", "Importe" };
+                        for (int c = 0; c < enc.Length; c++) ws.Cell(4, c + 1).Value = enc[c];
+                        ws.Range("A4:F4").Style.Font.SetBold().Fill.SetBackgroundColor(XLColor.FromArgb(0xD3, 0xD3, 0xD3));
+
+                        conn.Open();
+                        int fila = 5;
+                        using (var cmd = new SqlCommand($"SELECT Clave, Descripcion, Unidad, Cantidad, ISNULL(Costo,0) AS Costo FROM {tabla} ORDER BY Descripcion", conn))
+                        using (var r = cmd.ExecuteReader())
+                            while (r.Read())
+                            {
+                                ws.Cell(fila, 1).Value = r["Clave"].ToString();
+                                ws.Cell(fila, 2).Value = r["Descripcion"].ToString();
+                                ws.Cell(fila, 3).Value = r["Unidad"].ToString();
+                                ws.Cell(fila, 4).Value = Convert.ToDouble(r["Cantidad"]);
+                                ws.Cell(fila, 5).Value = Convert.ToDouble(r["Costo"]);
+                                ws.Cell(fila, 6).FormulaA1 = $"D{fila}*E{fila}";
+                                fila++;
+                            }
+
+                        ws.Cell(2, 1).Value = $"{fila - 5} insumos";
+                        ws.Range("A2:F2").Merge();
+                        ws.Cell(fila, 2).Value = "TOTAL MATERIAL";
+                        ws.Cell(fila, 6).FormulaA1 = fila == 5 ? "0" : $"SUM(F5:F{fila - 1})";
+                        ws.Range(fila, 2, fila, 6).Style.Font.SetBold();
+                        ws.Column(4).Style.NumberFormat.Format = "0.00";
+                        ws.Columns(5, 6).Style.NumberFormat.Format = "$#,##0.00";
+                        ws.Columns(1, 6).AdjustToContents(4, fila);
+                        libro.SaveAs(dlg.FileName);
+                    }
+                    lblStatus.Text = "Excel generado: " + dlg.FileName;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error exportando: " + ex.Message);
+                }
             }
         }
 
