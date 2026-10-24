@@ -52,7 +52,49 @@ namespace DynamicSepticSystem
                 var login = JsonConvert.DeserializeObject<LoginResponseApi>(json);
                 Token = login?.Token;
                 ExpiraUtc = login?.ExpiraUtc;
+                _usuario = usuario;
+                _clave = clave;
                 return login;
+            }
+        }
+
+        // El JWT vence (JwtHorasVigencia) con la app abierta; se guardan las
+        // credenciales en memoria para re-loguear solas ante un 401 (ver Enviar).
+        private static string _usuario, _clave;
+        private static readonly object _lockRelogin = new object();
+
+        /// <summary>
+        /// Envía la petición; si el API responde 401 (token vencido) vuelve a iniciar
+        /// sesión con las credenciales de la sesión y reintenta una sola vez.
+        /// </summary>
+        private static HttpResponseMessage Enviar(Func<HttpRequestMessage> crear)
+        {
+            string tokenUsado = Token;
+            HttpResponseMessage resp;
+            using (var req = crear())
+            {
+                AplicarEncabezados(req);
+                resp = Http.SendAsync(req).GetAwaiter().GetResult();
+            }
+
+            if (resp.StatusCode != HttpStatusCode.Unauthorized || _usuario == null)
+                return resp;
+
+            lock (_lockRelogin)
+            {
+                // Si otro hilo ya renovó mientras esperábamos, no se vuelve a loguear.
+                if (Token == tokenUsado)
+                {
+                    try { Login(_usuario, _clave); }
+                    catch { return resp; } // sigue el 401 original
+                }
+            }
+
+            resp.Dispose();
+            using (var req = crear())
+            {
+                AplicarEncabezados(req);
+                return Http.SendAsync(req).GetAwaiter().GetResult();
             }
         }
 
@@ -70,6 +112,7 @@ namespace DynamicSepticSystem
             {
                 Token = resp.Token;
                 ExpiraUtc = resp.ExpiraUtc;
+                _clave = claveNueva;
             }
             return resp;
         }
@@ -78,6 +121,7 @@ namespace DynamicSepticSystem
         {
             Token = null;
             ExpiraUtc = null;
+            _usuario = _clave = null;
         }
 
         /// <summary>
@@ -96,15 +140,10 @@ namespace DynamicSepticSystem
         /// <summary>GET tipado a una ruta relativa (p. ej. "/api/almacen/manzanas").</summary>
         public static T Get<T>(string rutaRelativa)
         {
-            using (var req = new HttpRequestMessage(HttpMethod.Get, BaseUrl + rutaRelativa))
+            using (var resp = Enviar(() => new HttpRequestMessage(HttpMethod.Get, BaseUrl + rutaRelativa)))
             {
-                AplicarEncabezados(req);
-
-                using (var resp = Http.SendAsync(req).GetAwaiter().GetResult())
-                {
-                    string json = LeerOLanzar(resp);
-                    return JsonConvert.DeserializeObject<T>(json);
-                }
+                string json = LeerOLanzar(resp);
+                return JsonConvert.DeserializeObject<T>(json);
             }
         }
 
@@ -114,18 +153,13 @@ namespace DynamicSepticSystem
         /// </summary>
         public static byte[] GetBytes(string rutaRelativa)
         {
-            using (var req = new HttpRequestMessage(HttpMethod.Get, BaseUrl + rutaRelativa))
+            using (var resp = Enviar(() => new HttpRequestMessage(HttpMethod.Get, BaseUrl + rutaRelativa)))
             {
-                AplicarEncabezados(req);
-
-                using (var resp = Http.SendAsync(req).GetAwaiter().GetResult())
-                {
-                    if (resp.StatusCode == HttpStatusCode.NotFound)
-                        return null;
-                    if (!resp.IsSuccessStatusCode)
-                        throw CrearExcepcion(resp);
-                    return resp.Content.ReadAsByteArrayAsync().GetAwaiter().GetResult();
-                }
+                if (resp.StatusCode == HttpStatusCode.NotFound)
+                    return null;
+                if (!resp.IsSuccessStatusCode)
+                    throw CrearExcepcion(resp);
+                return resp.Content.ReadAsByteArrayAsync().GetAwaiter().GetResult();
             }
         }
 
@@ -151,15 +185,12 @@ namespace DynamicSepticSystem
         private static string EnviarPost(string rutaRelativa, object cuerpo)
         {
             string body = JsonConvert.SerializeObject(cuerpo);
-            using (var req = new HttpRequestMessage(HttpMethod.Post, BaseUrl + rutaRelativa))
+            using (var resp = Enviar(() => new HttpRequestMessage(HttpMethod.Post, BaseUrl + rutaRelativa)
             {
-                AplicarEncabezados(req);
-                req.Content = new StringContent(body, Encoding.UTF8, "application/json");
-
-                using (var resp = Http.SendAsync(req).GetAwaiter().GetResult())
-                {
-                    return LeerOLanzar(resp);
-                }
+                Content = new StringContent(body, Encoding.UTF8, "application/json")
+            }))
+            {
+                return LeerOLanzar(resp);
             }
         }
 
