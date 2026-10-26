@@ -24,7 +24,10 @@ namespace DynamicSepticSystem
             // Pantallas negras/crashes de WebView2 en equipos con GPU/drivers flojos:
             // render por software. Debe ir antes de crear cualquier entorno WebView2.
             if (Environment.GetEnvironmentVariable("WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS") == null)
-                Environment.SetEnvironmentVariable("WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS", "--disable-gpu");
+                Environment.SetEnvironmentVariable("WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS",
+                    // HideCursorWhileTyping: el Runtime 152+ deja el puntero oculto en toda la app tras
+                    // cerrar una ventana WebView2 escribiendo (MicrosoftEdge/WebView2Feedback#5687).
+                    "--disable-gpu --disable-features=HideCursorWhileTyping");
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

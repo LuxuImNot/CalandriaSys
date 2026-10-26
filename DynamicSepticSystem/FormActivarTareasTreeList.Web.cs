@@ -1541,6 +1541,7 @@ namespace DynamicSepticSystem
         private class DestajoCasaReporte
         {
             public int Id { get; set; }
+            public int Numero { get; set; }
             public string Categoria { get; set; }
             public string Destajo { get; set; }
             public string Cuadrilla { get; set; }
@@ -1568,15 +1569,21 @@ namespace DynamicSepticSystem
                 .GroupBy(i => i.ID)
                 .ToDictionary(g => g.Key, g => g.First().Nombre);
 
-            return itemsTareas
-                .Where(d => d.Nivel == 1)
-                .Select(d =>
+            // Orden de la ruta critica: categoria por categoria, cada una con sus
+            // destajos en Orden (itemsTareas viene aplanado por Nivel, que entrelaza).
+            var enRuta = itemsTareas.Where(i => i.Nivel == 0)
+                .SelectMany(c => itemsTareas.Where(d => d.Nivel == 1 && d.ParentId == c.ID))
+                .ToList();
+
+            return enRuta
+                .Select((d, idx) =>
                 {
                     var hijos = itemsTareas.Where(i => i.ParentId == d.ID).ToList();
                     var materiales = hijos.Where(i => i.TipoTareaEnum == TipoTarea.Material).ToList();
                     return new DestajoCasaReporte
                     {
                         Id = d.ID,
+                        Numero = idx + 1,
                         Categoria = categorias.TryGetValue(d.ParentId, out string cat) ? cat : "(sin categor�a)",
                         Destajo = d.Nombre ?? "",
                         Cuadrilla = d.CuadrillaAsignada ?? "",
@@ -1700,24 +1707,19 @@ namespace DynamicSepticSystem
             using (var libro = new XLWorkbook())
             {
                 var hoja = libro.Worksheets.Add("Explosion");
-                const int cols = 11;
+                const int cols = 6;
                 int fila = EncabezadoHojaExcel(hoja, "EXPLOSIÓN DE INSUMOS POR DESTAJO", cols, nota);
                 EncabezadosColumnas(hoja, fila, new[]
                 {
-                    "# de destajo", "Descripción del destajo", "Categoría", "Cuadrilla", "Estado",
-                    "Clave de insumo", "Insumo", "Unidad", "Cantidad", "Precio", "Importe"
+                    "# de destajo", "Descripción del destajo", "Unidad", "Cantidad", "Precio", "Importe"
                 });
                 fila++;
 
                 var subtotales = new List<int>();
                 foreach (var d in datos)
                 {
-                    int ini = fila;
-                    hoja.Cell(fila, 1).Value = d.Id;
+                    hoja.Cell(fila, 1).Value = d.Numero;
                     hoja.Cell(fila, 2).Value = d.Destajo;
-                    hoja.Cell(fila, 3).Value = d.Categoria;
-                    hoja.Cell(fila, 4).Value = d.Cuadrilla;
-                    hoja.Cell(fila, 5).Value = d.Estado;
                     hoja.Range(fila, 1, fila, cols).Style.Font.Bold = true;
                     hoja.Range(fila, 1, fila, cols).Style.Fill.BackgroundColor = XLColor.FromArgb(245, 238, 228);
                     fila++;
@@ -1725,37 +1727,36 @@ namespace DynamicSepticSystem
                     int primera = fila;
                     foreach (var i in d.Insumos)
                     {
-                        hoja.Cell(fila, 6).Value = i.Clave;
-                        hoja.Cell(fila, 7).Value = i.Nombre;
-                        hoja.Cell(fila, 8).Value = i.Unidad;
-                        hoja.Cell(fila, 9).Value = (double)i.Cantidad;
-                        hoja.Cell(fila, 10).Value = (double)i.PrecioUnitario;
-                        hoja.Cell(fila, 11).FormulaA1 = "I" + fila + "*J" + fila;
+                        hoja.Cell(fila, 2).Value = i.Nombre;
+                        hoja.Cell(fila, 3).Value = i.Unidad;
+                        hoja.Cell(fila, 4).Value = (double)i.Cantidad;
+                        hoja.Cell(fila, 5).Value = (double)i.PrecioUnitario;
+                        hoja.Cell(fila, 6).FormulaA1 = "D" + fila + "*E" + fila;
                         fila++;
                     }
-                    if (fila == primera) { hoja.Cell(fila, 7).Value = "(sin insumos de material)"; fila++; }
+                    if (fila == primera) { hoja.Cell(fila, 2).Value = "(sin insumos de material)"; fila++; }
 
-                    hoja.Cell(fila, 7).Value = "Subtotal destajo " + d.Id;
-                    hoja.Cell(fila, 11).FormulaA1 = "SUM(K" + primera + ":K" + (fila - 1) + ")";
-                    hoja.Range(fila, 7, fila, cols).Style.Font.Bold = true;
-                    hoja.Range(fila, 7, fila, cols).Style.Border.TopBorder = XLBorderStyleValues.Thin;
+                    hoja.Cell(fila, 2).Value = "Subtotal destajo " + d.Numero;
+                    hoja.Cell(fila, 6).FormulaA1 = "SUM(F" + primera + ":F" + (fila - 1) + ")";
+                    hoja.Range(fila, 2, fila, cols).Style.Font.Bold = true;
+                    hoja.Range(fila, 2, fila, cols).Style.Border.TopBorder = XLBorderStyleValues.Thin;
                     subtotales.Add(fila);
                     fila += 2;
                 }
 
-                hoja.Cell(fila, 7).Value = "TOTAL MATERIAL";
-                hoja.Cell(fila, 11).FormulaA1 = subtotales.Count == 0 ? "0"
-                    : string.Join("+", subtotales.Select(r => "K" + r));
-                hoja.Range(fila, 7, fila, cols).Style.Font.Bold = true;
-                hoja.Range(fila, 7, fila, cols).Style.Border.TopBorder = XLBorderStyleValues.Medium;
+                hoja.Cell(fila, 2).Value = "TOTAL MATERIAL";
+                hoja.Cell(fila, 6).FormulaA1 = subtotales.Count == 0 ? "0"
+                    : string.Join("+", subtotales.Select(r => "F" + r));
+                hoja.Range(fila, 2, fila, cols).Style.Font.Bold = true;
+                hoja.Range(fila, 2, fila, cols).Style.Border.TopBorder = XLBorderStyleValues.Medium;
                 fila += 2;
 
                 hoja.Cell(fila++, 1).Value = "Nota: aquí se ve exactamente qué materiales se requieren para ejecutar cada destajo; sirve para realizar las compras por volumen.";
                 hoja.Cell(fila, 1).Value = "Nota: también sirve para el análisis de ajuste de materiales por destajo.";
 
-                hoja.Column(9).Style.NumberFormat.Format = "0.00";
-                hoja.Column(10).Style.NumberFormat.Format = "$#,##0.00";
-                hoja.Column(11).Style.NumberFormat.Format = "$#,##0.00";
+                hoja.Column(4).Style.NumberFormat.Format = "0.00";
+                hoja.Column(5).Style.NumberFormat.Format = "$#,##0.00";
+                hoja.Column(6).Style.NumberFormat.Format = "$#,##0.00";
                 hoja.Columns(1, cols).AdjustToContents(1, fila - 3);
                 hoja.SheetView.FreezeRows(4);
                 libro.SaveAs(ruta);
