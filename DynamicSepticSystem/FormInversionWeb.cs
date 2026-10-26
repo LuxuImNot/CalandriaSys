@@ -53,7 +53,7 @@ namespace DynamicSepticSystem
                 string userDataFolder = Path.Combine(
                     Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                     "Calandria", "WebView2Inversion");
-                var entorno = await CoreWebView2Environment.CreateAsync(null, userDataFolder, null);
+                var entorno = await CoreWebView2Environment.CreateAsync(null, userDataFolder, Program.OpcionesWebView2());
                 await webInversion.EnsureCoreWebView2Async(entorno);
             }
             catch (Exception ex)

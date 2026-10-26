@@ -18,16 +18,19 @@ namespace DynamicSepticSystem
 
         public static string VersionActual = "1.1";
 
+        // HideCursorWhileTyping: el Runtime 152+ deja el puntero oculto en toda la app tras
+        // cerrar una ventana WebView2 escribiendo (MicrosoftEdge/WebView2Feedback#5687).
+        // Se pasa por opciones del entorno: la variable de entorno no llegaba al proceso del navegador.
+        public static Microsoft.Web.WebView2.Core.CoreWebView2EnvironmentOptions OpcionesWebView2() =>
+            new Microsoft.Web.WebView2.Core.CoreWebView2EnvironmentOptions("--disable-features=HideCursorWhileTyping");
+
         [STAThread]
         static void Main()
         {
             // Pantallas negras/crashes de WebView2 en equipos con GPU/drivers flojos:
             // render por software. Debe ir antes de crear cualquier entorno WebView2.
             if (Environment.GetEnvironmentVariable("WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS") == null)
-                Environment.SetEnvironmentVariable("WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS",
-                    // HideCursorWhileTyping: el Runtime 152+ deja el puntero oculto en toda la app tras
-                    // cerrar una ventana WebView2 escribiendo (MicrosoftEdge/WebView2Feedback#5687).
-                    "--disable-gpu --disable-features=HideCursorWhileTyping");
+                Environment.SetEnvironmentVariable("WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS", "--disable-gpu");
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

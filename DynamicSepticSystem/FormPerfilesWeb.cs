@@ -75,7 +75,7 @@ namespace DynamicSepticSystem
                         Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                         "Calandria", "WebView2Perfiles");
                     Log($"IniciarWebView2Async intento {intento}/{intentos}: CreateAsync (carpeta={userDataFolder})");
-                    var entorno = await CoreWebView2Environment.CreateAsync(null, userDataFolder, null);
+                    var entorno = await CoreWebView2Environment.CreateAsync(null, userDataFolder, Program.OpcionesWebView2());
                     Log($"IniciarWebView2Async intento {intento}: entorno creado, versión runtime={entorno.BrowserVersionString}");
 
                     Log($"IniciarWebView2Async intento {intento}: EnsureCoreWebView2Async...");

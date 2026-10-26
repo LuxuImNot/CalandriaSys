@@ -71,7 +71,7 @@ namespace DynamicSepticSystem
                 string userDataFolder = Path.Combine(
                     Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                     "Calandria", "WebView2Login");
-                _entorno = await CoreWebView2Environment.CreateAsync(null, userDataFolder, null);
+                _entorno = await CoreWebView2Environment.CreateAsync(null, userDataFolder, Program.OpcionesWebView2());
                 await webLogin.EnsureCoreWebView2Async(_entorno);
             }
             catch (Exception ex)
