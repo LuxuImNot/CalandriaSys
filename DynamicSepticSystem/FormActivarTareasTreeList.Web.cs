@@ -1548,6 +1548,8 @@ namespace DynamicSepticSystem
             public string Estado { get; set; }
             public decimal Material { get; set; }
             public decimal ManoObra { get; set; }
+            public string Unidad { get; set; }
+            public decimal Cantidad { get; set; }
             public List<InsumoCasaReporte> Insumos { get; set; }
         }
 
@@ -1580,6 +1582,8 @@ namespace DynamicSepticSystem
                 {
                     var hijos = itemsTareas.Where(i => i.ParentId == d.ID).ToList();
                     var materiales = hijos.Where(i => i.TipoTareaEnum == TipoTarea.Material).ToList();
+                    // Unidad/cantidad del destajo: la propia, o la de su mano de obra si el nodo no la trae.
+                    var origen = d.Cantidad > 0 ? d : hijos.FirstOrDefault(i => i.TipoTareaEnum == TipoTarea.ManoDeObra) ?? d;
                     return new DestajoCasaReporte
                     {
                         Id = d.ID,
@@ -1588,6 +1592,8 @@ namespace DynamicSepticSystem
                         Destajo = d.Nombre ?? "",
                         Cuadrilla = d.CuadrillaAsignada ?? "",
                         Estado = d.Finalizado ? "Finalizado" : d.DesatajoActivado ? "Activado" : "Pendiente",
+                        Unidad = origen.Unidad ?? "",
+                        Cantidad = origen.Cantidad,
                         Material = materiales.Sum(i => i.Total),
                         ManoObra = hijos.Where(i => i.TipoTareaEnum == TipoTarea.ManoDeObra).Sum(i => i.Total),
                         Insumos = materiales.Select(i => new InsumoCasaReporte
@@ -1770,7 +1776,7 @@ namespace DynamicSepticSystem
             {
                 var hoja = libro.Worksheets.Add("Precios");
                 int fila = EncabezadoHojaExcel(hoja, "PRECIOS POR DESTAJO", 6, nota);
-                EncabezadosColumnas(hoja, fila, new[] { "Destajo", "Cuadrilla", "Estado", "Material", "Mano de obra", "Total" });
+                EncabezadosColumnas(hoja, fila, new[] { "# de destajo", "Descripción del destajo", "Unidad", "Cantidad", "Precio", "Importe" });
                 fila++;
 
                 foreach (var grupo in datos.GroupBy(d => d.Categoria))
@@ -1782,33 +1788,31 @@ namespace DynamicSepticSystem
 
                     foreach (var d in grupo)
                     {
-                        hoja.Cell(fila, 1).Value = d.Destajo;
-                        hoja.Cell(fila, 2).Value = d.Cuadrilla;
-                        hoja.Cell(fila, 3).Value = d.Estado;
-                        hoja.Cell(fila, 4).Value = (double)d.Material;
-                        hoja.Cell(fila, 5).Value = (double)d.ManoObra;
-                        hoja.Cell(fila, 6).Value = (double)(d.Material + d.ManoObra);
+                        hoja.Cell(fila, 1).Value = d.Numero;
+                        hoja.Cell(fila, 2).Value = d.Destajo;
+                        hoja.Cell(fila, 3).Value = d.Unidad;
+                        hoja.Cell(fila, 4).Value = (double)d.Cantidad;
+                        // ponytail: precio = importe / cantidad (promedio si hay varias manos de obra)
+                        hoja.Cell(fila, 5).Value = d.Cantidad == 0 ? 0 : (double)(d.ManoObra / d.Cantidad);
+                        hoja.Cell(fila, 6).Value = (double)d.ManoObra;
                         fila++;
                     }
 
-                    hoja.Cell(fila, 1).Value = "Total " + grupo.Key;
-                    hoja.Cell(fila, 4).Value = (double)grupo.Sum(d => d.Material);
-                    hoja.Cell(fila, 5).Value = (double)grupo.Sum(d => d.ManoObra);
-                    hoja.Cell(fila, 6).Value = (double)grupo.Sum(d => d.Material + d.ManoObra);
+                    hoja.Cell(fila, 2).Value = "Total " + grupo.Key;
+                    hoja.Cell(fila, 6).Value = (double)grupo.Sum(d => d.ManoObra);
                     hoja.Range(fila, 1, fila, 6).Style.Font.Bold = true;
                     hoja.Range(fila, 1, fila, 6).Style.Border.TopBorder = XLBorderStyleValues.Thin;
                     fila += 2;
                 }
 
-                hoja.Cell(fila, 1).Value = "TOTAL DE LA CASA";
-                hoja.Cell(fila, 4).Value = (double)datos.Sum(d => d.Material);
-                hoja.Cell(fila, 5).Value = (double)datos.Sum(d => d.ManoObra);
-                hoja.Cell(fila, 6).Value = (double)datos.Sum(d => d.Material + d.ManoObra);
+                hoja.Cell(fila, 2).Value = "TOTAL DE LA CASA";
+                hoja.Cell(fila, 6).Value = (double)datos.Sum(d => d.ManoObra);
                 hoja.Range(fila, 1, fila, 6).Style.Font.Bold = true;
                 hoja.Range(fila, 1, fila, 6).Style.Fill.BackgroundColor = XLColor.FromArgb(179, 108, 46);
                 hoja.Range(fila, 1, fila, 6).Style.Font.FontColor = XLColor.White;
 
-                hoja.Columns(4, 6).Style.NumberFormat.Format = "$#,##0.00";
+                hoja.Column(4).Style.NumberFormat.Format = "0.00";
+                hoja.Columns(5, 6).Style.NumberFormat.Format = "$#,##0.00";
                 hoja.Columns().AdjustToContents();
                 libro.SaveAs(ruta);
             }
